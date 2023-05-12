@@ -1,0 +1,61 @@
+export class Model {
+  constructor(size, mines) {
+    this.size = size;
+    this.minesNum = mines;
+    this.field = [];
+  }
+
+  generateField = () => {
+    for (let i = 0; i < this.size; i++) {
+      this.field.push([]);
+      for (let j = 0; j < this.size; j++) {
+        this.field[i].push(this.generateCell(i, j))
+      }
+    }
+    return this.field;
+  }
+
+  generateCell = (y, x) => {
+    const cell = { id: `cell_${y}_${x}`};
+    return cell;
+  }
+
+  generateMines = (id) => {
+    let i = 0;
+    while (i < this.minesNum) {
+      const cell = this.field[this.getRandomNum()][this.getRandomNum()];
+      if (cell.isMine || cell.id === id) {
+        continue;
+      }
+      cell.isMine = true;
+      cell.value = '💣';
+      i++;
+    }
+  }
+
+  getRandomNum = () => {
+    return Math.floor(Math.random() * this.size);
+  }
+
+  getNearbyCells = (cellId) => {
+    const cellY = +cellId.split('_')[1];
+    const cellX = +cellId.split('_')[2];
+    const nearbyCellsArray = [];
+    for (let y = cellY > 0 ? cellY - 1 : 0; y <= (cellY < this.size - 1 ? cellY + 1 : cellY); y++) {
+      for (let x = cellX > 0 ? cellX - 1 : 0; x <= (cellX < this.size - 1 ? cellX + 1 : cellX); x++) {
+        if (cellX === x && cellY === y) continue;
+        nearbyCellsArray.push(this.field[y][x])
+      }
+    }
+    return nearbyCellsArray;
+  }
+
+  getCellsMinesCount = () => {
+    this.field.forEach(row => {
+      row.forEach(cell => {
+        if (!cell.isMine) cell.value = this.getNearbyCells(cell.id).filter(cell => cell.isMine).length;
+      });
+    })
+  }
+
+}
