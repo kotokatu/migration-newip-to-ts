@@ -1,35 +1,39 @@
 export class View {
   constructor() {
-    this.field = this.createNode('div', 'field');
-    this.fieldHeader = this.createNode('div', 'field-header');
-    this.timeDisplay = this.createNode('div', 'time-display');
-    this.minesDisplay = this.createNode('div', 'mines-display');
+    this.gameContainer = this.createNode('div', 'game-container');
+    this.gameHeader = this.createNode('div', 'game-header');
+    this.gameField = this.createNode('div', 'field');
+    this.timeDisplay = this.createNode('span', 'time-display');
+    this.minesDisplay = this.createNode('span', 'mines-display');
+    this.button = this.createNode('button', 'new-game-btn', 'New Game')
   }
 
-  createNode = (tag, className) => {
+  createNode = (tag, className, content = null) => {
     const node = document.createElement(`${tag}`);
     node.className = className;
+    node.innerHTML = content;
     return node;
   }
 
   renderField = (array) => {
-    document.body.prepend(this.field);
-    this.field.append(this.fieldHeader);
-    this.fieldHeader.append(this.timeDisplay, this.minesDisplay);
+    document.body.prepend(this.gameContainer);
+    this.gameContainer.append(this.gameHeader);
+    this.gameHeader.append(this.timeDisplay, this.button, this.minesDisplay);
+    this.gameContainer.append(this.gameField);
     array.forEach(rowArr => {
-      this.field.append(this.renderRow(rowArr))
+      this.gameField.append(this.createRow(rowArr));
     });
   }
 
-  renderRow = (rowArr) => {
+  createRow = (rowArr) => {
     const row = this.createNode('div', 'row');
     rowArr.forEach(cell => {
-      row.append(this.renderCell(cell))
+      row.append(this.createCell(cell))
     });
     return row;
   }
 
-  renderCell = (cell) => {
+  createCell = (cell) => {
     const cellElem = this.createNode('div', 'cell closed');
     cellElem.id = cell.id;
     // cell.dataset.x = id.split('_')[1];
@@ -38,7 +42,7 @@ export class View {
   }
 
   renderOpenCell = (cell, isClicked) => {
-    const cellElem = this.field.querySelector(`#${cell.id}`);
+    const cellElem = this.gameField.querySelector(`#${cell.id}`);
     if (cell.isOpen) cellElem.classList.remove('closed');
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
     cellElem.innerHTML = cell.value === 0 ? '' : `<span class="cell-value">${cell.value}</span>`;
@@ -46,7 +50,7 @@ export class View {
 
   createOverlay = () => {
     const overlay = this.createNode('div', 'overlay');
-    this.field.prepend(overlay);
+    this.gameField.prepend(overlay);
     return overlay;
   }
 
@@ -55,19 +59,19 @@ export class View {
   }
 
   displayTime = (seconds) => {
-    this.timeDisplay.innerHTML = seconds;
+    this.timeDisplay.innerHTML = `${seconds}`.padStart(3, '0');
   }
 
   displayMinesLeft = (minesLeft) => {
-    this.minesDisplay.innerHTML = minesLeft;
+    this.minesDisplay.innerHTML = `${minesLeft}`.padStart(3, '0');
   }
 
   cellFlagToggle = (cell) => {
-    this.field.querySelector(`#${cell.id}`).innerHTML = cell.isFlagged ? '🚩' : '';
+    this.gameField.querySelector(`#${cell.id}`).innerHTML = cell.isFlagged ? '🚩' : '';
   }
 
   highlightWrongFlags = (cell) => {
-    const cellElem = this.field.querySelector(`#${cell.id}`);
+    const cellElem = this.gameField.querySelector(`#${cell.id}`);
     cellElem.classList.add('wrong-flag');
   }
 }

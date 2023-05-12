@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Digital-7 Mono";
+  src: url("fonts/digital-7-mono.woff2") format("woff2");
+  src: url("fonts/digital-7-mono.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,27 +17,40 @@ body {
   flex-direction: column;
 }
 
-.field {
-  position: relative;
+.game-container {
   margin: 50px auto 0;
+  background-color: rgb(61, 61, 61);
 }
 
-.field-header {
+.game-header {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 70px;
-  background-color: rgb(61, 61, 61);
 }
 
 .time-display,
 .mines-display {
-  width: 30%;
-  height: 80%;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 32px;
-  vertical-align: middle;
+  /* width: 30%; */
+  font-family: "Digital-7 Mono", sans-serif;
+  font-size: 40px;
   color: red;
+}
+
+.mines-display {
+  text-align: right;
+}
+
+.new-game-btn {
+  padding: 5px;
+  font-family: "Digital-7 Mono", sans-serif;
+  font-size: 20px;
+  background-color: rgb(124, 124, 124);
+
+}
+
+.field {
+  position: relative;
 }
 
 .row {
@@ -71,7 +92,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .message {
