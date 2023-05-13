@@ -5,11 +5,16 @@ export class GameUI {
     this.gameField = this.createNode('div', 'field');
     this.gameFooter = this.createNode('div', 'game-footer');
     this.timeDisplay = this.createNode('span', 'time-display');
-    this.minesDisplay = this.createNode('span', 'mines-display');
-    this.button = this.createNode('button', 'new-game-btn', 'New Game');
+    this.clicksDisplay = this.createNode('span', 'clicks-display');
+    this.newGameButton = this.createNode('button', 'new-game-btn', 'New Game');
+    this.select = this.createNode('select', 'level-select');
+    this.select.innerHTML = `<option value="easy">Easy</option>
+                             <option value="medium">Medium</option>
+                             <option value="hard">Hard</option>`;
     document.body.prepend(this.gameContainer);
-    this.gameHeader.append(this.timeDisplay, this.button, this.minesDisplay);
+    this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay);
     this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
+    this.gameFooter.append(this.select);
   }
 
   createNode = (tag, className, content = null) => {
@@ -63,16 +68,20 @@ export class GameUI {
     this.timeDisplay.innerText = `${seconds}`.padStart(3, '0');
   }
 
-  displayMinesLeft = (minesLeft) => {
-    this.minesDisplay.innerText = `${minesLeft}`.padStart(3, '0');
+  displayClicks = (clicks) => {
+    this.clicksDisplay.innerText = `${clicks}`.padStart(3, '0');
   }
 
   renderCellFlag = (cell) => {
-    this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
+    if (!cell.isOpen) this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
   }
 
   highlightWrongFlags = (cell) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     cellElem.classList.add('wrong-flag');
+  }
+
+  setSelectValue = (level) => {
+    this.select.value = level;
   }
 }

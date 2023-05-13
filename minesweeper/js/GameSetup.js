@@ -1,12 +1,15 @@
 export class GameSetup {
   constructor() {
-    this.levels = { easy: 10, medium: 15, hard: 25 };
-    this.minesNum = 10;
+    this.levels = { easy: [10, 10], medium: [15, 40], hard: [25, 99] };
   }
 
-  generateField = (level) => {
+  getData = (level) => {
+    this.size = this.levels[level][0];
+    this.minesNum = this.levels[level][1];
+  }
+
+  generateField = () => {
     this.field = [];
-    this.size = this.levels[level];
     for (let i = 0; i < this.size; i++) {
       this.field.push([]);
       for (let j = 0; j < this.size; j++) {
@@ -39,7 +42,6 @@ export class GameSetup {
   }
 
   getNearbyCells = (cellId) => {
-    console.log(this.size);
     const cellY = +cellId.split('_')[1];
     const cellX = +cellId.split('_')[2];
     const nearbyCellsArray = [];

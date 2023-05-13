@@ -4,46 +4,59 @@ export class GamePlay {
   constructor(gameUi, gameSetup) {
     this.gameUi = gameUi;
     this.gameSetup = gameSetup;
-    this.level = 'easy';
   }
 
-  setGameState = (state) => {
-    [this.gameSetup.field, this.gameSetup.size, this.clicks, this.opened, this.seconds, this.playing, this.minesLeft] = state;
+  setSavedState = (state) => {
+    [this.gameSetup.field, this.level, this.clicks, this.opened, this.seconds, this.playing] = state;
   }
 
   setInitialState = () => {
-    this.result = '';
+    if (!this.level) this.level = 'easy';
     this.clicks = 0;
     this.opened = 0;
     this.seconds = 0;
     this.playing = false;
-    this.minesLeft = this.gameSetup.minesNum;
     this.gameSetup.field = [];
     clearInterval(this.timer);
     set('state', '');
   }
 
   loadGame = () => {
-    get('state') ? this.setGameState(JSON.parse(get('state'))) : this.setInitialState();
-    const field = this.gameSetup.field.length ? this.gameSetup.field : this.gameSetup.generateField(this.level);
+    get('state') ? this.setSavedState(JSON.parse(get('state'))) : this.setInitialState();
+    this.gameSetup.getData(this.level);
+    this.gameUi.setSelectValue(this.level);
+    const field = this.gameSetup.field.length ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
-    this.gameUi.displayMinesLeft(this.minesLeft);
+    this.gameUi.displayClicks(this.clicks);
     this.gameUi.displayTime(this.seconds);
-    field.flat().forEach(cell => {
-      this.gameUi.renderCellFlag(cell);
-      this.gameUi.renderOpenCell(cell);
-    });
-    if (this.playing) this.startTimer();
-    this.gameUi.gameContainer.querySelector('.new-game-btn').addEventListener('click', () => {
+    if (this.playing) {
+      field.flat().forEach(cell => {
+        this.gameUi.renderCellFlag(cell);
+        this.gameUi.renderOpenCell(cell);
+      });
+      this.startTimer();
+    }
+    this.addListeners();
+  }
+
+  addListeners = () => {
+    this.gameUi.newGameButton.addEventListener('click', () => {
       this.setInitialState();
       this.loadGame();
     });
-    this.gameUi.gameContainer.querySelectorAll('.cell').forEach(cell => {
-      cell.addEventListener('click', this.handleLeftClick);
-      cell.addEventListener('contextmenu', this.handleRightClick);
+    this.gameUi.select.addEventListener('change', (e) => {
+      this.level = e.target.value;
+      this.setInitialState();
+      this.loadGame();
     });
-    window.addEventListener('beforeunload', () => set('state', JSON.stringify([this.gameSetup.field, this.gameSetup.size, this.clicks, this.opened, this.seconds, this.playing, this.minesLeft])));
-    window.addEventListener('load', () => get('state') ? this.setGameState(JSON.parse(get('state'))) : this.setInitialState());
+    this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
+    this.gameUi.gameField.addEventListener('contextmenu', this.handleRightClick);
+    // this.gameUi.gameContainer.querySelectorAll('.cell').forEach(cell => {
+    //   cell.addEventListener('click', this.handleLeftClick);
+    //   cell.addEventListener('contextmenu', this.handleRightClick);
+    // });
+
+    window.addEventListener('beforeunload', () => set('state', JSON.stringify([this.gameSetup.field, this.level, this.clicks, this.opened, this.seconds, this.playing])));
   }
 
   startGame = (cellId) => {
@@ -62,7 +75,9 @@ export class GamePlay {
   }
 
   handleLeftClick = (e) => {
+    if (!e.target.classList.contains('cell')) return;
     this.clicks++;
+    this.gameUi.displayClicks(this.clicks);
     if (!this.playing) this.startGame(e.target.id);
     const y = +e.target.id.split('_')[1];
     const x = +e.target.id.split('_')[2];
@@ -75,14 +90,15 @@ export class GamePlay {
     }
     if (this.opened === this.gameSetup.size ** 2 - this.gameSetup.minesNum) {
       this.endGame('win');
-      this.gameUi.displayMinesLeft(0);
       return;
     }
   }
 
   handleRightClick = (e) => {
     e.preventDefault();
+    if (!e.target.classList.contains('cell')) return;
     this.clicks++;
+    this.gameUi.displayClicks(this.clicks);
     if (!this.playing) this.startGame(e.target.id);
     const y = +e.target.closest('.cell').id.split('_')[1];
     const x = +e.target.closest('.cell').id.split('_')[2];
@@ -92,16 +108,12 @@ export class GamePlay {
 
   flagCell = (cell) => {
     cell.isFlagged = true;
-    this.minesLeft -= 1;
     this.gameUi.renderCellFlag(cell);
-    this.gameUi.displayMinesLeft(this.minesLeft);
   }
 
   unflagCell = (cell) => {
     cell.isFlagged = false;
-    this.minesLeft += 1;
     this.gameUi.renderCellFlag(cell);
-    this.gameUi.displayMinesLeft(this.minesLeft);
   }
 
   openCell = (cell, isClicked) => {
@@ -129,5 +141,6 @@ export class GamePlay {
       if (cell.isMine) this.openCell(cell);
       else if (cell.isFlagged) this.gameUi.highlightWrongFlags(cell);
     }));
+    this.setInitialState();
   }
 }

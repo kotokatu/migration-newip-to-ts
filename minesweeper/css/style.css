@@ -21,6 +21,7 @@ body {
 .game-container {
   margin: 50px auto 0;
   background-color: rgb(61, 61, 61);
+  border: 2px solid black;
 }
 
 .game-header {
@@ -31,13 +32,13 @@ body {
 }
 
 .time-display,
-.mines-display {
+.clicks-display {
   font-family: "Digital-7 Mono", sans-serif;
   font-size: 40px;
   color: red;
 }
 
-.mines-display {
+.clicks-display {
   text-align: right;
 }
 
@@ -45,11 +46,14 @@ body {
   padding: 5px;
   font-family: inherit;
   font-size: 18px;
+  background-color: darkgrey;
   background-color: rgb(124, 124, 124);
 }
 
 .field {
   position: relative;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .row {
@@ -121,7 +125,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .message {
@@ -129,4 +133,15 @@ body {
   font-size: 40px;
   font-weight: 700;
   color: red;
+}
+
+.game-footer {
+  padding: 10px;
+}
+
+.level-select {
+  padding: 3px;
+  font-family: 'Orbitron', sans-serif;
+  background-color: darkgrey;
+  outline: none;
 }
