@@ -4,6 +4,17 @@ export class GamePlay {
   constructor(gameUi, gameSetup) {
     this.gameUi = gameUi;
     this.gameSetup = gameSetup;
+
+    this.gameUi.newGameButton.addEventListener('click', () => {
+      this.setInitialState();
+      this.loadGame();
+    });
+    this.gameUi.select.addEventListener('change', (e) => {
+      this.level = e.target.value;
+      this.setInitialState();
+      this.loadGame();
+    });
+    window.addEventListener('beforeunload', () => set('state', JSON.stringify([this.gameSetup.field, this.level, this.clicks, this.opened, this.seconds, this.playing])));
   }
 
   setSavedState = (state) => {
@@ -36,27 +47,10 @@ export class GamePlay {
       });
       this.startTimer();
     }
-    this.addListeners();
-  }
-
-  addListeners = () => {
-    this.gameUi.newGameButton.addEventListener('click', () => {
-      this.setInitialState();
-      this.loadGame();
+    this.gameUi.gameContainer.querySelectorAll('.cell').forEach(cell => {
+      cell.addEventListener('click', this.handleLeftClick);
+      cell.addEventListener('contextmenu', this.handleRightClick);
     });
-    this.gameUi.select.addEventListener('change', (e) => {
-      this.level = e.target.value;
-      this.setInitialState();
-      this.loadGame();
-    });
-    this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
-    this.gameUi.gameField.addEventListener('contextmenu', this.handleRightClick);
-    // this.gameUi.gameContainer.querySelectorAll('.cell').forEach(cell => {
-    //   cell.addEventListener('click', this.handleLeftClick);
-    //   cell.addEventListener('contextmenu', this.handleRightClick);
-    // });
-
-    window.addEventListener('beforeunload', () => set('state', JSON.stringify([this.gameSetup.field, this.level, this.clicks, this.opened, this.seconds, this.playing])));
   }
 
   startGame = (cellId) => {
