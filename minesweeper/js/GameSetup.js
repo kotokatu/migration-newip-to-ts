@@ -1,4 +1,4 @@
-export class Model {
+export class GameSetup {
   constructor(size, mines) {
     this.size = size;
     this.minesNum = mines;

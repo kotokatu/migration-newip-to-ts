@@ -1,4 +1,4 @@
-export class View {
+export class GameUI {
   constructor() {
     this.gameContainer = this.createNode('div', 'game-container');
     this.gameHeader = this.createNode('div', 'game-header');
@@ -66,7 +66,7 @@ export class View {
     this.minesDisplay.innerHTML = `${minesLeft}`.padStart(3, '0');
   }
 
-  cellFlagToggle = (cell) => {
+  toggleCellFlag = (cell) => {
     this.gameField.querySelector(`#${cell.id}`).innerHTML = cell.isFlagged ? '🚩' : '';
   }
 

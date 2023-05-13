@@ -1,8 +1,16 @@
-import { Model } from "./model.js";
-import { View } from "./view.js";
-import { Controller } from "./controller.js";
+import { GameSetup } from "./GameSetup.js";
+import { GameUI } from "./GameUi.js";
+import { GamePlay } from "./GamePlay.js";
 
-const model = new Model(10, 10);
-const view = new View();
-const controller = new Controller(view, model);
-controller.init();
+function init() {
+  const gameSetup = new GameSetup(10, 10);
+  const gameUi = new GameUI();
+  const gamePlay = new GamePlay(gameUi, gameSetup);
+  gamePlay.loadGame();
+  document.querySelector('.new-game-btn').addEventListener('click', () => {
+    document.querySelector('.game-container').remove();
+    init();
+  });
+}
+
+window.onload = init;
