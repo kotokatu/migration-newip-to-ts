@@ -15,6 +15,7 @@
 body {
   display: flex;
   flex-direction: column;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .game-container {
@@ -31,7 +32,6 @@ body {
 
 .time-display,
 .mines-display {
-  /* width: 30%; */
   font-family: "Digital-7 Mono", sans-serif;
   font-size: 40px;
   color: red;
@@ -43,10 +43,9 @@ body {
 
 .new-game-btn {
   padding: 5px;
-  font-family: "Digital-7 Mono", sans-serif;
-  font-size: 20px;
+  font-family: inherit;
+  font-size: 18px;
   background-color: rgb(124, 124, 124);
-
 }
 
 .field {
@@ -63,9 +62,44 @@ body {
   align-items: center;
   width: 30px;
   height: 30px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
   border: 1px solid black;
   cursor: default;
 }
+
+.cell.cc-1 {
+  color: rgb(228, 222, 222);
+}
+
+.cell.cc-2 {
+  color: rgb(48, 214, 48);
+}
+
+.cell.cc-3 {
+  color: rgb(52, 4, 184);
+}
+
+.cell.cc-4 {
+  color: yellow;
+}
+
+.cell.cc-5 {
+  color: orange;
+}
+
+.cell.cc-6 {
+  color: red;
+}
+
+.cell.cc-7 {
+  color: brown;
+}
+
+.cell.cc-8 {
+  color: black;
+}
+
 
 .cell.open {
   background-color: grey;
@@ -73,10 +107,6 @@ body {
 
 .cell.exploded {
   background-color: red;
-}
-
-.cell.flagged {
-  content: '🚩';
 }
 
 .cell.wrong-flag {

@@ -39,6 +39,7 @@ export class GameSetup {
   }
 
   getNearbyCells = (cellId) => {
+    console.log(this.size);
     const cellY = +cellId.split('_')[1];
     const cellX = +cellId.split('_')[2];
     const nearbyCellsArray = [];

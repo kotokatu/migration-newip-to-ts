@@ -3,13 +3,13 @@ export class GameUI {
     this.gameContainer = this.createNode('div', 'game-container');
     this.gameHeader = this.createNode('div', 'game-header');
     this.gameField = this.createNode('div', 'field');
+    this.gameFooter = this.createNode('div', 'game-footer');
     this.timeDisplay = this.createNode('span', 'time-display');
     this.minesDisplay = this.createNode('span', 'mines-display');
     this.button = this.createNode('button', 'new-game-btn', 'New Game');
     document.body.prepend(this.gameContainer);
-    this.gameContainer.append(this.gameHeader);
     this.gameHeader.append(this.timeDisplay, this.button, this.minesDisplay);
-    this.gameContainer.append(this.gameField);
+    this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
   }
 
   createNode = (tag, className, content = null) => {
@@ -35,16 +35,18 @@ export class GameUI {
   }
 
   createCell = (cell) => {
-    const cellElem = this.createNode('div', 'cell');
+    const cellElem = this.createNode('span', 'cell');
     cellElem.id = cell.id;
     return cellElem;
   }
 
   renderOpenCell = (cell, isClicked) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
-    if (cell.isOpen) cellElem.classList.add('open');
+    if (cell.isOpen) {
+      cellElem.classList.add('open', `cc-${cell.value}`);
+      cellElem.innerText = cell.value === 0 ? '' : cell.value;
+    }
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
-    cellElem.innerHTML = cell.value === 0 ? '' : `<span class="cell-value">${cell.value}</span>`;
   }
 
   createOverlay = () => {
@@ -58,15 +60,15 @@ export class GameUI {
   }
 
   displayTime = (seconds) => {
-    this.timeDisplay.innerHTML = `${seconds}`.padStart(3, '0');
+    this.timeDisplay.innerText = `${seconds}`.padStart(3, '0');
   }
 
   displayMinesLeft = (minesLeft) => {
-    this.minesDisplay.innerHTML = `${minesLeft}`.padStart(3, '0');
+    this.minesDisplay.innerText = `${minesLeft}`.padStart(3, '0');
   }
 
-  toggleCellFlag = (cell) => {
-    this.gameField.querySelector(`#${cell.id}`).innerHTML = cell.isFlagged ? '🚩' : '';
+  renderCellFlag = (cell) => {
+    this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
   }
 
   highlightWrongFlags = (cell) => {
