@@ -5,7 +5,11 @@ export class GameUI {
     this.gameField = this.createNode('div', 'field');
     this.timeDisplay = this.createNode('span', 'time-display');
     this.minesDisplay = this.createNode('span', 'mines-display');
-    this.button = this.createNode('button', 'new-game-btn', 'New Game')
+    this.button = this.createNode('button', 'new-game-btn', 'New Game');
+    document.body.prepend(this.gameContainer);
+    this.gameContainer.append(this.gameHeader);
+    this.gameHeader.append(this.timeDisplay, this.button, this.minesDisplay);
+    this.gameContainer.append(this.gameField);
   }
 
   createNode = (tag, className, content = null) => {
@@ -16,10 +20,7 @@ export class GameUI {
   }
 
   renderField = (array) => {
-    document.body.prepend(this.gameContainer);
-    this.gameContainer.append(this.gameHeader);
-    this.gameHeader.append(this.timeDisplay, this.button, this.minesDisplay);
-    this.gameContainer.append(this.gameField);
+    this.gameField.replaceChildren();
     array.forEach(rowArr => {
       this.gameField.append(this.createRow(rowArr));
     });
@@ -34,16 +35,14 @@ export class GameUI {
   }
 
   createCell = (cell) => {
-    const cellElem = this.createNode('div', 'cell closed');
+    const cellElem = this.createNode('div', 'cell');
     cellElem.id = cell.id;
-    // cell.dataset.x = id.split('_')[1];
-    // cell.dataset.y = id.split('_')[2];
     return cellElem;
   }
 
   renderOpenCell = (cell, isClicked) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
-    if (cell.isOpen) cellElem.classList.remove('closed');
+    if (cell.isOpen) cellElem.classList.add('open');
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
     cellElem.innerHTML = cell.value === 0 ? '' : `<span class="cell-value">${cell.value}</span>`;
   }

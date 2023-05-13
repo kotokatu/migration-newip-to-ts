@@ -2,28 +2,36 @@ export class GamePlay {
   constructor(gameUi, gameSetup) {
     this.gameUi = gameUi;
     this.gameSetup = gameSetup;
+    this.level = 'easy';
+  }
+
+  setStats = () => {
+    this.result = '';
     this.clicks = 0;
-    this.minesLeft = this.gameSetup.minesNum;
     this.opened = 0;
     this.seconds = 0;
     this.playing = false;
+    clearInterval(this.timer);
+    this.minesLeft = this.gameSetup.minesNum;
   }
 
   loadGame = () => {
-    const field = this.gameSetup.generateField();
-    this.gameUi.renderField(field,);
+    this.setStats();
+    const field = this.gameSetup.generateField(this.level);
+    this.gameUi.renderField(field);
     this.gameUi.displayMinesLeft(this.minesLeft);
     this.gameUi.displayTime(this.seconds);
     this.gameUi.gameContainer.querySelectorAll('.cell').forEach(cell => {
       cell.addEventListener('click', this.handleLeftClickOnCell);
       cell.addEventListener('contextmenu', this.handleRightClickOnCell);
     });
+    this.gameUi.gameContainer.querySelector('.new-game-btn').addEventListener('click', this.loadGame);
   }
 
   startGame = (cellId) => {
     this.playing = true;
     this.gameSetup.generateMines(cellId);
-    this.gameSetup.getCellsMinesCount();
+    this.gameSetup.getNearbyMinesCount();
     this.timer = setInterval(() => {
       this.seconds++;
       this.gameUi.displayTime(this.seconds);
@@ -38,7 +46,7 @@ export class GamePlay {
     const cell = this.gameSetup.field[y][x];
     if (cell.value === 0) this.openNearbyCells(cell);
     else this.openCell(cell, true);
-    if (cell.isFlagged) this.unflagCell(cell);
+    // if (cell.isFlagged) this.unflagCell(cell);
     if (cell.isMine) {
       this.result = 'lose';
       this.endGame();
@@ -46,8 +54,8 @@ export class GamePlay {
     }
     if (this.opened === this.gameSetup.size ** 2 - this.gameSetup.minesNum) {
       this.result = 'win';
-      this.gameUi.displayMinesLeft(0);
       this.endGame();
+      this.gameUi.displayMinesLeft(0);
       return;
     }
   }
@@ -59,9 +67,7 @@ export class GamePlay {
     const y = +e.target.closest('.cell').id.split('_')[1];
     const x = +e.target.closest('.cell').id.split('_')[2];
     const cell = this.gameSetup.field[y][x];
-    if (!cell.isOpen) {
-      cell.isFlagged ? this.unflagCell(cell) : this.flagCell(cell);
-    };
+    if (!cell.isOpen) cell.isFlagged ? this.unflagCell(cell) : this.flagCell(cell);
   }
 
   flagCell = (cell) => {
@@ -96,9 +102,9 @@ export class GamePlay {
 
   endGame = () => {
     this.playing = false;
+    clearInterval(this.timer);
     if (this.result === 'lose') this.gameUi.displayMessage('Game over<br>Try again');
     if (this.result === 'win') this.gameUi.displayMessage(`Hooray! You found all mines in ${this.seconds} seconds and ${this.clicks} moves!`);
-    clearInterval(this.timer);
     this.gameSetup.field.forEach(row => row.forEach(cell => {
       if (cell.isMine) this.openCell(cell);
       else if (cell.isFlagged) this.gameUi.highlightWrongFlags(cell);

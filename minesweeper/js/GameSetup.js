@@ -1,11 +1,12 @@
 export class GameSetup {
-  constructor(size, mines) {
-    this.size = size;
-    this.minesNum = mines;
-    this.field = [];
+  constructor() {
+    this.levels = { easy: 10, medium: 15, hard: 25 };
+    this.minesNum = 10;
   }
 
-  generateField = () => {
+  generateField = (level) => {
+    this.field = [];
+    this.size = this.levels[level];
     for (let i = 0; i < this.size; i++) {
       this.field.push([]);
       for (let j = 0; j < this.size; j++) {
@@ -50,7 +51,7 @@ export class GameSetup {
     return nearbyCellsArray;
   }
 
-  getCellsMinesCount = () => {
+  getNearbyMinesCount = () => {
     this.field.forEach(row => {
       row.forEach(cell => {
         if (!cell.isMine) cell.value = this.getNearbyCells(cell.id).filter(cell => cell.isMine).length;

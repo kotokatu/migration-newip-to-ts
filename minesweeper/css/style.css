@@ -63,13 +63,12 @@ body {
   align-items: center;
   width: 30px;
   height: 30px;
-  background-color: grey;
   border: 1px solid black;
   cursor: default;
 }
 
-.cell.closed {
-  background-color: rgb(61, 61, 61);
+.cell.open {
+  background-color: grey;
 }
 
 .cell.exploded {
