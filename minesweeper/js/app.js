@@ -6,7 +6,7 @@ function init() {
   const gameSetup = new GameSetup();
   const gameUi = new GameUI();
   const gamePlay = new GamePlay(gameUi, gameSetup);
-  gamePlay.loadGame();
+  gamePlay.init();
 }
 
 window.onload = init;

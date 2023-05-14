@@ -7,14 +7,19 @@ export class GameUI {
     this.timeDisplay = this.createNode('span', 'time-display');
     this.clicksDisplay = this.createNode('span', 'clicks-display');
     this.newGameButton = this.createNode('button', 'new-game-btn', 'New Game');
-    this.select = this.createNode('select', 'level-select');
-    this.select.innerHTML = `<option value="easy">Easy</option>
-                             <option value="medium">Medium</option>
-                             <option value="hard">Hard</option>`;
+    this.select = this.createNode('select', 'level-select',
+                                  `<option value="easy">Easy</option>
+                                  <option value="medium">Medium</option>
+                                  <option value="hard">Hard</option>`);
+    this.minesInput = this.createNode('input', 'mines-input');
+    this.minesInput.setAttribute('type', 'number');
+    this.minesInput.setAttribute('min', '10');
+    this.minesInput.setAttribute('max', '99');
+    this.minesInput.setAttribute('required', '');
     document.body.prepend(this.gameContainer);
     this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay);
     this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
-    this.gameFooter.append(this.select);
+    this.gameFooter.append(this.select, this.minesInput);
   }
 
   createNode = (tag, className, content = null) => {
@@ -81,7 +86,15 @@ export class GameUI {
     cellElem.classList.add('wrong-flag');
   }
 
-  setSelectValue = (level) => {
+  setLevel = (level) => {
     this.select.value = level;
+  }
+
+  setMinesInputValue = (value) => {
+    this.minesInput.value = value;
+  }
+
+  toggleMinesInputDisable = (isPlaying) => {
+    this.minesInput.disabled = isPlaying ? true : false;
   }
 }

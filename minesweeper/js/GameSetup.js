@@ -3,9 +3,13 @@ export class GameSetup {
     this.levels = { easy: [10, 10], medium: [15, 40], hard: [25, 99] };
   }
 
-  getData = (level) => {
+  setFieldSize = (level) => {
     this.size = this.levels[level][0];
+  }
+
+  setMinesNum = (level) => {
     this.minesNum = this.levels[level][1];
+    return this.minesNum;
   }
 
   generateField = () => {

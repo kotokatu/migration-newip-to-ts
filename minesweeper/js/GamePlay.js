@@ -5,20 +5,30 @@ export class GamePlay {
     this.gameUi = gameUi;
     this.gameSetup = gameSetup;
 
+  }
+
+  init = () => {
+    this.loadGame();
     this.gameUi.newGameButton.addEventListener('click', () => {
       this.setInitialState();
       this.loadGame();
     });
     this.gameUi.select.addEventListener('change', (e) => {
       this.level = e.target.value;
+      this.gameSetup.setMinesNum(this.level);
       this.setInitialState();
       this.loadGame();
     });
-    window.addEventListener('beforeunload', () => set('state', JSON.stringify([this.gameSetup.field, this.level, this.clicks, this.opened, this.seconds, this.playing])));
+    this.gameUi.minesInput.addEventListener('change', (e) => {
+      if (e.target.value > 9 && e.target.value < 100) this.gameSetup.minesNum = e.target.value;
+      else this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
+    });
+    window.addEventListener('beforeunload', () => set('state', JSON.stringify([this.gameSetup.field, this.gameSetup.minesNum, this.level, this.clicks, this.opened, this.seconds, this.playing])));
+
   }
 
   setSavedState = (state) => {
-    [this.gameSetup.field, this.level, this.clicks, this.opened, this.seconds, this.playing] = state;
+    [this.gameSetup.field, this.gameSetup.minesNum, this.level, this.clicks, this.opened, this.seconds, this.playing] = state;
   }
 
   setInitialState = () => {
@@ -34,8 +44,11 @@ export class GamePlay {
 
   loadGame = () => {
     get('state') ? this.setSavedState(JSON.parse(get('state'))) : this.setInitialState();
-    this.gameSetup.getData(this.level);
-    this.gameUi.setSelectValue(this.level);
+    this.gameSetup.setFieldSize(this.level);
+    if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
+    this.gameUi.setLevel(this.level);
+    this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
+    this.gameUi.toggleMinesInputDisable(this.playing);
     const field = this.gameSetup.field.length ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
     this.gameUi.displayClicks(this.clicks);
@@ -58,6 +71,7 @@ export class GamePlay {
     this.gameSetup.generateMines(cellId);
     this.gameSetup.getNearbyMinesCount();
     this.startTimer();
+    this.gameUi.toggleMinesInputDisable(this.playing);
   }
 
   startTimer = () => {
@@ -135,6 +149,7 @@ export class GamePlay {
       if (cell.isMine) this.openCell(cell);
       else if (cell.isFlagged) this.gameUi.highlightWrongFlags(cell);
     }));
+    this.gameUi.toggleMinesInputDisable(this.playing);
     this.setInitialState();
   }
 }

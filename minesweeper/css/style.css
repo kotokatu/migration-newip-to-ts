@@ -137,11 +137,22 @@ body {
 
 .game-footer {
   padding: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.level-select, 
+.mines-input {
+  font-family: 'Orbitron', sans-serif;
+  background-color: darkgrey;
+  outline: none;
+  border: none;
 }
 
 .level-select {
   padding: 3px;
-  font-family: 'Orbitron', sans-serif;
-  background-color: darkgrey;
-  outline: none;
+}
+
+.mines-input {
+  padding: 4px;
 }
