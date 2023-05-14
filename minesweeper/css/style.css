@@ -16,6 +16,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: 'Orbitron', sans-serif;
+  background-color: #272727;
 }
 
 .game-container {
@@ -72,6 +73,14 @@ body {
   cursor: default;
 }
 
+.cell:first-child {
+  border-left: none;
+}
+
+.cell:last-child {
+  border-right: none;
+}
+
 .cell.cc-1 {
   color: rgb(228, 222, 222);
 }
@@ -110,7 +119,7 @@ body {
 }
 
 .cell.exploded {
-  background-color: red;
+  background-color: #ff0000;
 }
 
 .cell.wrong-flag {
@@ -129,7 +138,7 @@ body {
 }
 
 .message {
-  font-family: monospace;
+  font-family: 'Orbitron', sans-serif;
   font-size: 40px;
   font-weight: 700;
   color: red;
@@ -141,7 +150,7 @@ body {
   gap: 5px;
 }
 
-.level-select, 
+.level-select,
 .mines-input {
   font-family: 'Orbitron', sans-serif;
   background-color: darkgrey;
@@ -155,4 +164,26 @@ body {
 
 .mines-input {
   padding: 4px;
+}
+
+.mines-input::-webkit-inner-spin-button {
+  opacity: 1;
+  /* background-color: #272727; */
+}
+
+.sound-btn {
+  width: 25px;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  background-image: url('../assets/svg/volume-on.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 25px 25px;
+  cursor: pointer;
+}
+
+.sound-btn.off {
+  background-image: url('../assets/svg/cross.svg'), url('../assets/svg/volume-on.svg');
+  background-size: 20px 20px, 25px 25px;
 }

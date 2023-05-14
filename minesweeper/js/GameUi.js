@@ -1,5 +1,10 @@
 export class GameUI {
   constructor() {
+    this.open = new Audio('../assets/sounds/open.wav');
+    this.flag = new Audio('../assets/sounds/flag.wav');
+    this.unflag = new Audio('../assets/sounds/unflag.wav');
+    this.lose = new Audio('../assets/sounds/lose.wav');
+    this.win = new Audio('../assets/sounds/win.wav');
     this.gameContainer = this.createNode('div', 'game-container');
     this.gameHeader = this.createNode('div', 'game-header');
     this.gameField = this.createNode('div', 'field');
@@ -15,11 +20,11 @@ export class GameUI {
     this.minesInput.setAttribute('type', 'number');
     this.minesInput.setAttribute('min', '10');
     this.minesInput.setAttribute('max', '99');
-    this.minesInput.setAttribute('required', '');
+    this.soundBtn = this.createNode('button', 'sound-btn');
     document.body.prepend(this.gameContainer);
     this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay);
     this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
-    this.gameFooter.append(this.select, this.minesInput);
+    this.gameFooter.append(this.select, this.minesInput, this.soundBtn);
   }
 
   createNode = (tag, className, content = null) => {
@@ -53,7 +58,7 @@ export class GameUI {
   renderOpenCell = (cell, isClicked) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     if (cell.isOpen) {
-      cellElem.classList.add('open', `cc-${cell.value}`);
+      if (!cell.isMine) cellElem.classList.add('open', `cc-${cell.value}`);
       cellElem.innerText = cell.value === 0 ? '' : cell.value;
     }
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
@@ -96,5 +101,13 @@ export class GameUI {
 
   toggleMinesInputDisable = (isPlaying) => {
     this.minesInput.disabled = isPlaying ? true : false;
+  }
+
+  playSound = (action) => {
+    this[action].play();
+  }
+
+  toggleSound = (soundOn) => {
+    soundOn ? this.soundBtn.classList.remove('off') : this.soundBtn.classList.add('off');
   }
 }

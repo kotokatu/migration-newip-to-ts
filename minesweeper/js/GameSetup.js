@@ -9,7 +9,6 @@ export class GameSetup {
 
   setMinesNum = (level) => {
     this.minesNum = this.levels[level][1];
-    return this.minesNum;
   }
 
   generateField = () => {
