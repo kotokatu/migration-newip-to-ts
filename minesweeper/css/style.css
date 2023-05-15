@@ -59,6 +59,7 @@ body.light .game-container {
   left: 0;
   top: -8px;
   font-size: 14px;
+  letter-spacing: 0.1em;
   text-align: center;
 }
 
@@ -184,7 +185,7 @@ body.light .game-container {
 }
 
 body.light .overlay-score {
-  background-color: rgba(231, 231, 231, 0.9);
+  background-color: rgba(231, 231, 231, 0.95);
 }
 
 .message {
@@ -271,9 +272,13 @@ body.light .sound-btn.off {
   cursor: pointer;
 }
 
+.score-btn.active {
+  color: rgb(3, 179, 33);
+}
+
 .score-table {
   font-family: 'Orbitron', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: red;
 }

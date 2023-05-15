@@ -41,6 +41,7 @@ export class GameUI {
     array.forEach(rowArr => {
       this.gameField.append(this.createRow(rowArr));
     });
+    this.scoreBtn.classList.remove('active');
   }
 
   createRow = (rowArr) => {
@@ -118,12 +119,14 @@ export class GameUI {
     themeLight ? document.body.classList.add('light') : document.body.classList.remove('light');
   }
 
-  toggleScore = (scoreArr) => {
+  toggleScoreDisplay = (scoreArr) => {
     const overlay = document.querySelector('.overlay-score') || this.createOverlay('overlay-score');
     if (document.querySelector('.score-table')) {
+      this.scoreBtn.classList.remove('active');
       overlay.remove();
       return;
     }
+    this.scoreBtn.classList.add('active');
     const scoreTable = this.createNode('table', 'score-table',
     `<table><tr><th class="score-cell">level</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
     overlay.append(scoreTable);
@@ -136,5 +139,9 @@ export class GameUI {
       })
     });
   }
+
+  // toggleScoreBtn = () => {
+  //   this.scoreBtn.classList.toggle('active');
+  // }
 
 }

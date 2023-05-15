@@ -35,7 +35,7 @@ export class GamePlay {
       this.themeLight = !this.themeLight;
       this.gameUi.toggleTheme(this.themeLight);
     });
-    this.gameUi.scoreBtn.addEventListener('click', () => this.gameUi.toggleScore(this.score));
+    this.gameUi.scoreBtn.addEventListener('click', () => this.gameUi.toggleScoreDisplay(this.score));
     window.addEventListener('beforeunload', () => set('state', JSON.stringify(
       [
         this.gameSetup.field,
