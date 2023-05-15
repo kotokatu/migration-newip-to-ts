@@ -80,9 +80,7 @@ export class GamePlay {
 
   loadGame = () => {
     this.gameSetup.setFieldSize(this.level);
-    // if (!this.playing) {
-    //   this.gameSetup.setMinesNum(this.level);
-    // }
+    if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
     const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
     if (this.playing) {
@@ -171,7 +169,7 @@ export class GamePlay {
   updateScore = () => {
     this.score = this.score || [];
     if (this.score.length === 10) this.score.pop();
-    this.score.unshift([this.level, this.gameSetup.minesNum, this.seconds]);
+    this.score.unshift([this.level, this.gameSetup.minesNum, this.clicks, this.seconds]);
   }
 
   endGame = (result) => {

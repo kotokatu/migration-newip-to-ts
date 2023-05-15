@@ -13,9 +13,9 @@ export class GameUI {
     this.clicksDisplay = this.createNode('span', 'clicks-display');
     this.newGameButton = this.createNode('button', 'new-game-btn', 'New Game');
     this.select = this.createNode('select', 'level-select',
-                                  `<option value="easy">Easy</option>
-                                  <option value="medium">Medium</option>
-                                  <option value="hard">Hard</option>`);
+                                  `<option value="easy">easy</option>
+                                  <option value="medium">medium</option>
+                                  <option value="hard">hard</option>`);
     this.minesInput = this.createNode('input', 'mines-input');
     this.minesInput.setAttribute('type', 'number');
     this.minesInput.setAttribute('min', '10');
@@ -66,15 +66,15 @@ export class GameUI {
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
 
-  createOverlay = () => {
-    const overlay = this.createNode('div', 'overlay');
-    this.gameField.prepend(overlay);
+  createOverlay = (cls) => {
+    const overlay = this.createNode('div', `overlay ${cls}`);
+    this.gameField.append(overlay);
     return overlay;
   }
 
   displayMessage = (msg) => {
-    const overlay = this.createOverlay();
-    overlay.innerHTML = `<span class="message">${msg}</span>`;
+    const overlay = this.createOverlay('overlay-message');
+    overlay.innerHTML = `<p class="message">${msg}</p>`;
   }
 
   displayTime = (seconds) => {
@@ -119,14 +119,14 @@ export class GameUI {
   }
 
   toggleScore = (scoreArr) => {
-    const overlay = document.querySelector('.overlay') || this.createOverlay();
+    const overlay = document.querySelector('.overlay-score') || this.createOverlay('overlay-score');
     if (document.querySelector('.score-table')) {
       overlay.remove();
       return;
     }
     const scoreTable = this.createNode('table', 'score-table',
-    `<table><tr><th>Date</th><th>Level</th><th>Mines</th><th>Clicks</th></tr></table>`);
-    overlay.replaceChildren(scoreTable);
+    `<table><tr><th class="score-cell">level</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
+    overlay.append(scoreTable);
     if (scoreArr) scoreArr.forEach(row => {
       const rowElem = this.createNode('tr', 'score-row');
       scoreTable.append(rowElem);
