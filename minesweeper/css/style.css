@@ -19,10 +19,18 @@ body {
   background-color: #272727;
 }
 
+body.light {
+  background-color: #ffffff;
+}
+
 .game-container {
   margin: 50px auto 0;
   background-color: rgb(61, 61, 61);
   border: 2px solid black;
+}
+
+body.light .game-container {
+  background-color: rgb(219, 219, 219);
 }
 
 .game-header {
@@ -34,6 +42,7 @@ body {
 
 .time-display,
 .clicks-display {
+  position: relative;
   font-family: "Digital-7 Mono", sans-serif;
   font-size: 40px;
   color: red;
@@ -43,12 +52,34 @@ body {
   text-align: right;
 }
 
+.time-display::before,
+.clicks-display::before {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: -8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.time-display::before {
+  content: 'time';
+}
+
+.clicks-display::before {
+  content: 'clicks';
+}
+
 .new-game-btn {
   padding: 5px;
   font-family: inherit;
   font-size: 18px;
   background-color: darkgrey;
-  background-color: rgb(124, 124, 124);
+  cursor: pointer;
+}
+
+.new-game-btn:active {
+  color: rgb(3, 243, 43);
 }
 
 .field {
@@ -113,7 +144,6 @@ body {
   color: black;
 }
 
-
 .cell.open {
   background-color: grey;
 }
@@ -164,26 +194,48 @@ body {
 
 .mines-input {
   padding: 4px;
+  max-width: 50px;
 }
 
 .mines-input::-webkit-inner-spin-button {
   opacity: 1;
-  /* background-color: #272727; */
 }
 
-.sound-btn {
+.sound-btn,
+.theme-btn {
   width: 25px;
   background-color: transparent;
   border: 0;
   outline: 0;
-  background-image: url('../assets/svg/volume-on.svg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 25px 25px;
   cursor: pointer;
 }
 
+.sound-btn {
+  background-image: url('../assets/svg/volume-on-dark.svg');
+}
+
+body.light .sound-btn {
+  background-image: url('../assets/svg/volume-on-light.svg');
+}
+
 .sound-btn.off {
-  background-image: url('../assets/svg/cross.svg'), url('../assets/svg/volume-on.svg');
+  background-image: url('../assets/svg/cross-dark.svg'), url('../assets/svg/volume-on-dark.svg');
+  background-size: 20px 20px, 25px 25px;
+}
+
+.theme-btn {
+  margin-left: auto;
+  background-image: url('../assets/svg/dark-mode.svg');
+}
+
+body.light .theme-btn {
+  background-image: url('../assets/svg/light-mode.svg');
+}
+
+body.light .sound-btn.off {
+  background-image: url('../assets/svg/cross-light.svg'), url('../assets/svg/volume-on-light.svg');
   background-size: 20px 20px, 25px 25px;
 }

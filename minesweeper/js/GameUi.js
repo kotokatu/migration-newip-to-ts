@@ -21,10 +21,11 @@ export class GameUI {
     this.minesInput.setAttribute('min', '10');
     this.minesInput.setAttribute('max', '99');
     this.soundBtn = this.createNode('button', 'sound-btn');
+    this.themeBtn = this.createNode('button', 'theme-btn');
     document.body.prepend(this.gameContainer);
     this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay);
     this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
-    this.gameFooter.append(this.select, this.minesInput, this.soundBtn);
+    this.gameFooter.append(this.select, this.minesInput, this.soundBtn, this.themeBtn);
   }
 
   createNode = (tag, className, content = null) => {
@@ -59,7 +60,7 @@ export class GameUI {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     if (cell.isOpen) {
       if (!cell.isMine) cellElem.classList.add('open', `cc-${cell.value}`);
-      cellElem.innerText = cell.value === 0 ? '' : cell.value;
+      cellElem.innerHTML = cell.value === 0 ? '' : cell.value;
     }
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
@@ -109,5 +110,9 @@ export class GameUI {
 
   toggleSound = (soundOn) => {
     soundOn ? this.soundBtn.classList.remove('off') : this.soundBtn.classList.add('off');
+  }
+
+  toggleTheme = (themeLight) => {
+    themeLight ? document.body.classList.add('light') : document.body.classList.remove('light');
   }
 }
