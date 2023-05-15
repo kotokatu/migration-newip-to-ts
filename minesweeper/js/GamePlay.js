@@ -4,25 +4,26 @@ export class GamePlay {
   constructor(gameUi, gameSetup) {
     this.gameUi = gameUi;
     this.gameSetup = gameSetup;
-
   }
 
   init = () => {
+    get('state') ? this.setSavedState(JSON.parse(get('state'))) : this.resetState();
     this.loadGame();
     this.gameUi.newGameButton.addEventListener('click', () => {
-      this.setInitialState();
+      this.resetState();
       this.loadGame();
     });
     this.gameUi.select.addEventListener('change', (e) => {
       this.level = e.target.value;
-      this.setInitialState();
+      this.resetState();
       this.gameSetup.setMinesNum(this.level);
       this.loadGame();
     });
     this.gameUi.minesInput.addEventListener('change', (e) => {
       (e.target.value > 9 && e.target.value < 100)
         ? this.gameSetup.minesNum = e.target.value
-        : this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
+        : this.gameSetup.setMinesNum(this.level);
+      this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
     });
     this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
     this.gameUi.gameField.addEventListener('contextmenu', this.handleRightClick);
@@ -34,6 +35,7 @@ export class GamePlay {
       this.themeLight = !this.themeLight;
       this.gameUi.toggleTheme(this.themeLight);
     });
+    this.gameUi.scoreBtn.addEventListener('click', () => this.gameUi.toggleScore(this.score));
     window.addEventListener('beforeunload', () => set('state', JSON.stringify(
       [
         this.gameSetup.field,
@@ -44,10 +46,10 @@ export class GamePlay {
         this.seconds,
         this.playing,
         this.soundOn,
-        this.themeLight
+        this.themeLight,
+        this.score
       ]
     )));
-
   }
 
   setSavedState = (state) => {
@@ -60,43 +62,43 @@ export class GamePlay {
       this.seconds,
       this.playing,
       this.soundOn,
-      this.themeLight
+      this.themeLight,
+      this.score
     ] = state;
   }
 
-  setInitialState = () => {
-    if (!this.level) this.level = 'easy';
+  resetState = () => {
+    this.gameSetup.field = [];
+    this.level = this.level || 'easy';
     this.clicks = 0;
     this.opened = 0;
     this.seconds = 0;
     this.playing = false;
-    this.gameSetup.field = [];
     clearInterval(this.timer);
-    set('state', '');
+    // set('state', '');
   }
 
   loadGame = () => {
-    get('state') ? this.setSavedState(JSON.parse(get('state'))) : this.setInitialState();
     this.gameSetup.setFieldSize(this.level);
-    if (!this.playing) {
-      this.gameSetup.setMinesNum(this.level);
-    }
-    this.gameUi.setLevel(this.level);
-    this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
-    this.gameUi.toggleMinesInputDisable(this.playing);
-    const field = this.gameSetup.field.length ? this.gameSetup.field : this.gameSetup.generateField();
+    // if (!this.playing) {
+    //   this.gameSetup.setMinesNum(this.level);
+    // }
+    const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
+    if (this.playing) {
+      field.forEach(row => row.forEach(cell => {
+        this.gameUi.displayFlagged(cell);
+        this.gameUi.displayOpen(cell);
+      }));
+      this.startTimer();
+    }
+    this.gameUi.toggleMinesInputDisable(this.playing);
+    this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
+    this.gameUi.displayLevel(this.level);
     this.gameUi.displayClicks(this.clicks);
     this.gameUi.displayTime(this.seconds);
     this.gameUi.toggleSound(this.soundOn);
     this.gameUi.toggleTheme(this.themeLight);
-    if (this.playing) {
-      field.forEach(row => row.forEach(cell => {
-        this.gameUi.renderCellFlag(cell);
-        this.gameUi.renderOpenCell(cell);
-      }));
-      this.startTimer();
-    }
   }
 
   startGame = (id) => {
@@ -134,9 +136,6 @@ export class GamePlay {
   handleRightClick = (e) => {
     e.preventDefault();
     if (!e.target.classList.contains('cell')) return;
-    // this.clicks++;
-    // this.gameUi.displayClicks(this.clicks);
-    // if (!this.playing) this.startGame(e.target.id);
     const cell = this.getCell(e.target.id);
     if (!cell.isOpen) cell.isFlagged ? this.unflagCell(cell, true) : this.flagCell(cell);
   }
@@ -144,27 +143,35 @@ export class GamePlay {
   flagCell = (cell) => {
     if (this.soundOn) this.gameUi.playSound('flag');
     cell.isFlagged = true;
-    this.gameUi.renderCellFlag(cell);
+    this.gameUi.displayFlagged(cell);
   }
 
   unflagCell = (cell, isClicked) => {
     if (isClicked && this.soundOn) this.gameUi.playSound('unflag');
     cell.isFlagged = false;
-    this.gameUi.renderCellFlag(cell);
+    this.gameUi.displayFlagged(cell);
   }
 
   openCell = (cell, isClicked) => {
     cell.isOpen = true;
     this.opened++;
-    if (isClicked) this.clicks++;
-    if (!cell.isMine && isClicked && this.soundOn) this.gameUi.playSound('open');
-    if (cell.isFlagged) this.unflagCell(cell);
-    this.gameUi.renderOpenCell(cell, isClicked);
+    if (isClicked) {
+      this.clicks++;
+      if (!cell.isMine && this.soundOn) this.gameUi.playSound('open');
+      if (cell.isFlagged) this.unflagCell(cell);
+    }
+    this.gameUi.displayOpen(cell, isClicked);
     if (cell.value === 0) {
       this.gameSetup.getNearbyCells(cell.id).forEach(cell => {
-        if (!cell.isOpen) this.openCell(cell);
+        if (!cell.isOpen && !cell.isFlagged) this.openCell(cell);
       })
     }
+  }
+
+  updateScore = () => {
+    this.score = this.score || [];
+    if (this.score.length === 10) this.score.pop();
+    this.score.unshift([this.level, this.gameSetup.minesNum, this.seconds]);
   }
 
   endGame = (result) => {
@@ -175,6 +182,7 @@ export class GamePlay {
       this.gameUi.displayMessage('Game over<br>Try again');
     }
     if (result === 'win') {
+      this.updateScore();
       this.gameUi.displayMessage(`Hooray! You found all mines in ${this.seconds} seconds and ${this.clicks} moves!`);
       if (this.soundOn) this.gameUi.playSound('win');
     }
@@ -183,6 +191,6 @@ export class GamePlay {
       else if (cell.isFlagged) this.gameUi.highlightWrongFlags(cell);
     }));
     this.gameUi.toggleMinesInputDisable(this.playing);
-    this.setInitialState();
+    this.resetState();
   }
 }

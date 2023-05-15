@@ -22,10 +22,11 @@ export class GameUI {
     this.minesInput.setAttribute('max', '99');
     this.soundBtn = this.createNode('button', 'sound-btn');
     this.themeBtn = this.createNode('button', 'theme-btn');
+    this.scoreBtn = this.createNode('button', 'score-btn', 'SCORE');
     document.body.prepend(this.gameContainer);
     this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay);
     this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
-    this.gameFooter.append(this.select, this.minesInput, this.soundBtn, this.themeBtn);
+    this.gameFooter.append(this.select, this.minesInput, this.scoreBtn, this.soundBtn, this.themeBtn);
   }
 
   createNode = (tag, className, content = null) => {
@@ -56,7 +57,7 @@ export class GameUI {
     return cellElem;
   }
 
-  renderOpenCell = (cell, isClicked) => {
+  displayOpen = (cell, isClicked) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     if (cell.isOpen) {
       if (!cell.isMine) cellElem.classList.add('open', `cc-${cell.value}`);
@@ -72,7 +73,8 @@ export class GameUI {
   }
 
   displayMessage = (msg) => {
-    this.createOverlay().innerHTML = `<span class="message">${msg}</span>`;
+    const overlay = this.createOverlay();
+    overlay.innerHTML = `<span class="message">${msg}</span>`;
   }
 
   displayTime = (seconds) => {
@@ -83,7 +85,7 @@ export class GameUI {
     this.clicksDisplay.innerText = `${clicks}`.padStart(3, '0');
   }
 
-  renderCellFlag = (cell) => {
+  displayFlagged = (cell) => {
     if (!cell.isOpen) this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
   }
 
@@ -92,7 +94,7 @@ export class GameUI {
     cellElem.classList.add('wrong-flag');
   }
 
-  setLevel = (level) => {
+  displayLevel = (level) => {
     this.select.value = level;
   }
 
@@ -115,4 +117,24 @@ export class GameUI {
   toggleTheme = (themeLight) => {
     themeLight ? document.body.classList.add('light') : document.body.classList.remove('light');
   }
+
+  toggleScore = (scoreArr) => {
+    const overlay = document.querySelector('.overlay') || this.createOverlay();
+    if (document.querySelector('.score-table')) {
+      overlay.remove();
+      return;
+    }
+    const scoreTable = this.createNode('table', 'score-table',
+    `<table><tr><th>Date</th><th>Level</th><th>Mines</th><th>Clicks</th></tr></table>`);
+    overlay.replaceChildren(scoreTable);
+    if (scoreArr) scoreArr.forEach(row => {
+      const rowElem = this.createNode('tr', 'score-row');
+      scoreTable.append(rowElem);
+      row.forEach(cellData => {
+        const cellElem = this.createNode('td', 'score-cell', cellData);
+        rowElem.append(cellElem);
+      })
+    });
+  }
+
 }

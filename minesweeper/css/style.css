@@ -167,6 +167,10 @@ body.light .game-container {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
+.overlay.hidden {
+  display: none;
+}
+
 .message {
   font-family: 'Orbitron', sans-serif;
   font-size: 40px;
@@ -177,7 +181,7 @@ body.light .game-container {
 .game-footer {
   padding: 10px;
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
 .level-select,
@@ -227,7 +231,6 @@ body.light .sound-btn {
 }
 
 .theme-btn {
-  margin-left: auto;
   background-image: url('../assets/svg/dark-mode.svg');
 }
 
@@ -238,4 +241,23 @@ body.light .theme-btn {
 body.light .sound-btn.off {
   background-image: url('../assets/svg/cross-light.svg'), url('../assets/svg/volume-on-light.svg');
   background-size: 20px 20px, 25px 25px;
+}
+
+.score-btn {
+  margin-left: auto;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: red;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+}
+
+.score-table {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: red;
 }
