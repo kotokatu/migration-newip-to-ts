@@ -50,25 +50,17 @@ export class GameUI {
 
   createRow = (rowArr) => {
     const row = this.createNode('div', 'row');
+    const size = rowArr.length;
     rowArr.forEach(cell => {
-      row.append(this.createCell(cell))
+      row.append(this.createCell(cell, size))
     });
     return row;
   }
 
-  createCell = (cell) => {
-    const cellElem = this.createNode('span', 'cell');
+  createCell = (cell, size) => {
+    const cellElem = this.createNode('span', `cell size-${size}`);
     cellElem.id = cell.id;
     return cellElem;
-  }
-
-  displayOpen = (cell, isClicked) => {
-    const cellElem = this.gameField.querySelector(`#${cell.id}`);
-    if (cell.isOpen && !cell.isFlagged) {
-      if (!cell.isMine) cellElem.classList.add('open', `cc-${cell.value}`);
-      cellElem.innerHTML = cell.value === 0 ? '' : cell.value;
-    }
-    if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
 
   createOverlay = (cls) => {
@@ -97,6 +89,15 @@ export class GameUI {
   displayFlagsMinesLeft = (flagsCount, minesCount) => {
     this.flagsLeft.innerText = `${flagsCount}`.padStart(2, '0');
     this.minesLeft.innerText = `${minesCount}`.padStart(2, '0');
+  }
+
+  displayOpen = (cell, isClicked) => {
+    const cellElem = this.gameField.querySelector(`#${cell.id}`);
+    if (cell.isOpen) {
+      cell.isMine ? cellElem.classList.add('open', 'mine') : cellElem.classList.add('open', `cc-${cell.value}`) ;
+      cellElem.innerHTML = cell.value ? cell.value : '';
+    }
+    if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
 
   highlightWrongFlags = (cell) => {

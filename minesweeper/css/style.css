@@ -125,6 +125,8 @@ body.light .mines-left::before {
 
 .field {
   position: relative;
+  display: flex;
+  flex-direction: column;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
@@ -137,10 +139,9 @@ body.light .mines-left::before {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 35px;
-  height: 35px;
-  font-family: 'Orbitron', sans-serif;
+  flex: 1;
   font-size: 20px;
+  font-family: 'Orbitron', sans-serif;
   border: 1px solid black;
   cursor: default;
 }
@@ -151,6 +152,17 @@ body.light .mines-left::before {
 
 .cell:last-child {
   border-right: none;
+}
+
+.cell.size-10 {
+  width: 35px;
+  height: 35px;
+}
+
+.cell.size-15,
+.cell.size-25 {
+  width: 30px;
+  height: 30px;
 }
 
 .cell.cc-1 {
@@ -189,6 +201,13 @@ body.light .mines-left::before {
   background-color: grey;
 }
 
+.cell.mine {
+  background-image: url('../assets/svg/mine-black.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+}
+
 .cell.exploded {
   background-color: #ff0000;
 }
@@ -213,22 +232,8 @@ body.light .mines-left::before {
   text-align: center;
 }
 
-.overlay-score {
-  background-color: rgba(0, 0, 0, 0.95);
-  justify-content: center;
-  align-items: flex-start;
-  text-align: center;
-}
-
-.score-cell {
-  padding: 3px 10px;
-}
-
-body.light .overlay-score {
-  background-color: rgba(248, 248, 248, 0.95);
-}
-
 .message {
+  max-width: 600px;
   font-family: 'Orbitron', sans-serif;
   font-size: 40px;
   font-weight: 700;
@@ -251,11 +256,13 @@ body.light .overlay-score {
 
 .level-select {
   padding: 3px;
+  border: 2px solid black;
 }
 
 .mines-input {
+  max-width: 53px;
   padding: 4px;
-  max-width: 50px;
+  border: 2px solid black;
 }
 
 .mines-input::-webkit-inner-spin-button {
@@ -322,3 +329,45 @@ body.light .sound-btn.off {
   font-weight: 700;
   color: red;
 }
+
+.overlay-score {
+  background-color: rgba(0, 0, 0, 0.95);
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+}
+
+body.light .overlay-score {
+  background-color: rgba(248, 248, 248, 0.95);
+}
+
+.score-cell {
+  padding: 3px 10px;
+}
+
+.score-table th {
+  text-decoration: underline dotted;
+  text-underline-offset: 5px;
+}
+
+@media (max-width: 1000px) {
+
+  .cell.size-25 {
+    width: 25px;
+    height: 25px;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .cell.size-25 {
+    width: 19px;
+    height: 19px;
+    font-size: 12px;
+  }
+
+}
+
+
+
