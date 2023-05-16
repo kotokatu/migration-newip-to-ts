@@ -12,6 +12,9 @@ export class GameUI {
     this.timeDisplay = this.createNode('span', 'time-display');
     this.clicksDisplay = this.createNode('span', 'clicks-display');
     this.newGameButton = this.createNode('button', 'new-game-btn', 'New Game');
+    this.stats = this.createNode('div', 'stats');
+    this.minesLeft = this.createNode('span', 'mines-left', '00');
+    this.flagsLeft = this.createNode('span', 'flags-left', '00');
     this.select = this.createNode('select', 'level-select',
                                   `<option value="easy">easy</option>
                                   <option value="medium">medium</option>
@@ -24,7 +27,8 @@ export class GameUI {
     this.themeBtn = this.createNode('button', 'theme-btn');
     this.scoreBtn = this.createNode('button', 'score-btn', 'SCORE');
     document.body.prepend(this.gameContainer);
-    this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay);
+    this.gameHeader.append(this.timeDisplay, this.newGameButton, this.clicksDisplay, this.stats);
+    this.stats.append(this.minesLeft, this.flagsLeft);
     this.gameContainer.append(this.gameHeader, this.gameField, this.gameFooter);
     this.gameFooter.append(this.select, this.minesInput, this.scoreBtn, this.soundBtn, this.themeBtn);
   }
@@ -60,7 +64,7 @@ export class GameUI {
 
   displayOpen = (cell, isClicked) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
-    if (cell.isOpen) {
+    if (cell.isOpen && !cell.isFlagged) {
       if (!cell.isMine) cellElem.classList.add('open', `cc-${cell.value}`);
       cellElem.innerHTML = cell.value === 0 ? '' : cell.value;
     }
@@ -88,6 +92,11 @@ export class GameUI {
 
   displayFlagged = (cell) => {
     if (!cell.isOpen) this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
+  }
+
+  displayFlagsMinesLeft = (flagsCount, minesCount) => {
+    this.flagsLeft.innerText = `${flagsCount}`.padStart(2, '0');
+    this.minesLeft.innerText = `${minesCount}`.padStart(2, '0');
   }
 
   highlightWrongFlags = (cell) => {
@@ -128,7 +137,7 @@ export class GameUI {
     }
     this.scoreBtn.classList.add('active');
     const scoreTable = this.createNode('table', 'score-table',
-    `<table><tr><th class="score-cell">level</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
+      `<table><tr><th class="score-cell">level</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
     overlay.append(scoreTable);
     if (scoreArr) scoreArr.forEach(row => {
       const rowElem = this.createNode('tr', 'score-row');

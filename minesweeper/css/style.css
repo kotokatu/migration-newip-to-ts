@@ -36,6 +36,7 @@ body.light .game-container {
 .game-header {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
   align-items: center;
   height: 70px;
 }
@@ -83,6 +84,45 @@ body.light .game-container {
   color: rgb(3, 243, 43);
 }
 
+.stats {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mines-left, 
+.flags-left {
+  position: relative;
+  padding-left: 25px;
+  color: rgb(168, 168, 168);
+}
+
+body.light .mines-left,
+body.light .flags-left {
+  color: #000000;
+}
+
+.mines-left::before,
+.flags-left::before {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 0px;
+}
+
+.mines-left::before {
+  content: '';
+  background-image: url('../assets/svg/mine-red.svg');
+}
+
+body.light .mines-left::before {
+  background-image: url('../assets/svg/mine-black.svg');
+}
+
+.flags-left::before {
+  content: '🚩';
+}
+
 .field {
   position: relative;
   border-top: 1px solid black;
@@ -97,8 +137,8 @@ body.light .game-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   font-family: 'Orbitron', sans-serif;
   font-size: 20px;
   border: 1px solid black;
@@ -185,7 +225,7 @@ body.light .game-container {
 }
 
 body.light .overlay-score {
-  background-color: rgba(231, 231, 231, 0.95);
+  background-color: rgba(248, 248, 248, 0.95);
 }
 
 .message {

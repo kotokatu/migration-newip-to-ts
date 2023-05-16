@@ -23,6 +23,7 @@ export class GamePlay {
       (e.target.value > 9 && e.target.value < 100)
         ? this.gameSetup.minesNum = e.target.value
         : this.gameSetup.setMinesNum(this.level);
+      this.gameUi.displayFlagsMinesLeft(this.flagged, this.gameSetup.minesNum);
       this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
     });
     this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
@@ -43,6 +44,7 @@ export class GamePlay {
         this.level,
         this.clicks,
         this.opened,
+        this.flagged,
         this.seconds,
         this.playing,
         this.soundOn,
@@ -59,6 +61,7 @@ export class GamePlay {
       this.level,
       this.clicks,
       this.opened,
+      this.flagged,
       this.seconds,
       this.playing,
       this.soundOn,
@@ -72,6 +75,7 @@ export class GamePlay {
     this.level = this.level || 'easy';
     this.clicks = 0;
     this.opened = 0;
+    this.flagged = 0;
     this.seconds = 0;
     this.playing = false;
     clearInterval(this.timer);
@@ -81,6 +85,9 @@ export class GamePlay {
   loadGame = () => {
     this.gameSetup.setFieldSize(this.level);
     if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
+    this.flagged = this.playing ? this.flagged : 0;
+    this.minesLeft = this.gameSetup.minesNum - this.flagged;
+    this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
     const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
     if (this.playing) {
@@ -125,7 +132,8 @@ export class GamePlay {
     if (!e.target.classList.contains('cell')) return;
     if (!this.playing) this.startGame(e.target.id);
     const cell = this.getCell(e.target.id);
-    if (!cell.isOpen) this.openCell(cell, true);
+    if (cell.isOpen) return;
+    this.openCell(cell, true);
     this.gameUi.displayClicks(this.clicks);
     if (cell.isMine) this.endGame('lose');
     else if (this.opened === this.gameSetup.size ** 2 - this.gameSetup.minesNum) this.endGame('win');
@@ -141,13 +149,19 @@ export class GamePlay {
   flagCell = (cell) => {
     if (this.soundOn) this.gameUi.playSound('flag');
     cell.isFlagged = true;
+    this.flagged++;
+    this.minesLeft--;
     this.gameUi.displayFlagged(cell);
+    this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
   }
 
   unflagCell = (cell, isClicked) => {
     if (isClicked && this.soundOn) this.gameUi.playSound('unflag');
     cell.isFlagged = false;
+    this.flagged--;
+    this.minesLeft++;
     this.gameUi.displayFlagged(cell);
+    this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
   }
 
   openCell = (cell, isClicked) => {
