@@ -26,7 +26,7 @@ body.light {
 .game-container {
   margin: 50px auto 0;
   background-color: rgb(61, 61, 61);
-  border: 2px solid black;
+  /* border: 2px solid black; */
 }
 
 body.light .game-container {
@@ -39,6 +39,8 @@ body.light .game-container {
   flex-wrap: wrap;
   align-items: center;
   height: 70px;
+  border: 2px solid black;
+  border-bottom: 0;
 }
 
 .time-display,
@@ -167,23 +169,11 @@ body.light .mines-left::before {
 }
 
 .cell:first-child {
-  border-left: none;
+  border-left: 2px solid black;
 }
 
 .cell:last-child {
-  border-right: none;
-}
-
-.cell.size-10 {
-  width: 10%;
-}
-
-.cell.size-15 {
-  width: calc(100% / 15);
-}
-
-.cell.size-25 {
-  width: 4%;
+  border-right: 2px solid black;
 }
 
 .cell.cc-1 {
@@ -265,6 +255,8 @@ body.light .mines-left::before {
   padding: 10px;
   display: flex;
   gap: 10px;
+  border: 2px solid black;
+  border-top: 0;
 }
 
 .level-select,
@@ -397,7 +389,7 @@ body.light .overlay-score {
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 725px) {
 
   .field.size-10 {
     width: 70vw;

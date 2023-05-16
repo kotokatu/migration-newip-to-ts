@@ -7,7 +7,7 @@ export class GameUI {
     this.win = new Audio('../assets/sounds/win.wav');
     this.gameContainer = this.createNode('div', 'game-container');
     this.gameHeader = this.createNode('div', 'game-header');
-    this.gameField = this.createNode('div', 'field');
+    this.gameField = this.createNode('div', '');
     this.gameFooter = this.createNode('div', 'game-footer');
     this.timeDisplay = this.createNode('span', 'time-display');
     this.clicksDisplay = this.createNode('span', 'clicks-display');
