@@ -125,13 +125,33 @@ body.light .mines-left::before {
 
 .field {
   position: relative;
+  max-width: 750px;
+  max-height: 750px;
+  display: flex;
+  flex-direction: column;
   display: flex;
   flex-direction: column;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
 
+.field.size-10 {
+  width: 25vw;
+  height: 25vw;
+}
+
+.field.size-15 {
+  width: 35vw;
+  height: 35vw;
+}
+
+.field.size-25 {
+  width: 95vw;
+  height: 95vw;
+}
+
 .row {
+  flex: 1;
   display: flex;
 }
 
@@ -155,14 +175,15 @@ body.light .mines-left::before {
 }
 
 .cell.size-10 {
-  width: 35px;
-  height: 35px;
+  width: 10%;
 }
 
-.cell.size-15,
+.cell.size-15 {
+  width: calc(100% / 15);
+}
+
 .cell.size-25 {
-  width: 30px;
-  height: 30px;
+  width: 4%;
 }
 
 .cell.cc-1 {
@@ -350,23 +371,47 @@ body.light .overlay-score {
   text-underline-offset: 5px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1400px) {
 
-  .cell.size-25 {
-    width: 25px;
-    height: 25px;
+  .field.size-10 {
+    width: 35vw;
+    height: 35vw;
   }
 
+  .field.size-15 {
+    width: 50vw;
+    height: 50vw;
+  }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 1000px) {
 
-  .cell.size-25 {
-    width: 19px;
-    height: 19px;
-    font-size: 12px;
+  .field.size-10 {
+    width: 50vw;
+    height: 50vw;
   }
 
+  .field.size-15 {
+    width: 65vw;
+    height: 65vw;
+  }
+}
+
+@media (max-width: 680px) {
+
+  .field.size-10 {
+    width: 70vw;
+    height: 70vw;
+  }
+
+  .field.size-15 {
+    width: 95vw;
+    height: 95vw;
+  }
+
+  .cell.size-25 {
+    font-size: 12px;
+  }
 }
 
 

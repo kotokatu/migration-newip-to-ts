@@ -42,6 +42,8 @@ export class GameUI {
 
   renderField = (array) => {
     this.gameField.replaceChildren();
+    const size = array.length;
+    this.gameField.className = `field size-${size}`;
     array.forEach(rowArr => {
       this.gameField.append(this.createRow(rowArr));
     });
