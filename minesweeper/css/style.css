@@ -92,6 +92,7 @@ body.light .game-container {
 }
 
 .stats {
+  width: 52px;
   display: flex;
   flex-direction: column;
 }

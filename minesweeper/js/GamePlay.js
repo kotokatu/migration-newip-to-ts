@@ -23,8 +23,9 @@ export class GamePlay {
       (e.target.value > 9 && e.target.value < 100)
         ? this.gameSetup.minesNum = e.target.value
         : this.gameSetup.setMinesNum(this.level);
-      this.minesLeft = this.gameSetup.minesNum - this.flagged;
-      this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
+      this.mineCount = this.gameSetup.minesNum - this.flagCount;
+      this.gameUi.displayFlagCount(this.flagCount);
+      this.gameUi.displayMineCount(this.mineCount);
       // this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
     });
     this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
@@ -45,7 +46,7 @@ export class GamePlay {
         this.level,
         this.clicks,
         this.opened,
-        this.flagged,
+        this.flagCount,
         this.seconds,
         this.playing,
         this.soundOn,
@@ -62,7 +63,7 @@ export class GamePlay {
       this.level,
       this.clicks,
       this.opened,
-      this.flagged,
+      this.flagCount,
       this.seconds,
       this.playing,
       this.soundOn,
@@ -76,7 +77,7 @@ export class GamePlay {
     this.level = this.level || 'easy';
     this.clicks = 0;
     this.opened = 0;
-    this.flagged = 0;
+    this.flagCount = 0;
     this.seconds = 0;
     this.playing = false;
     clearInterval(this.timer);
@@ -85,9 +86,8 @@ export class GamePlay {
   loadGame = () => {
     this.gameSetup.setFieldSize(this.level);
     if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
-    this.flagged = this.playing ? this.flagged : 0;
-    this.minesLeft = this.gameSetup.minesNum - this.flagged;
-    this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
+    this.flagCount = this.playing ? this.flagCount : 0;
+    this.mineCount = this.gameSetup.minesNum - this.flagCount;
     const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
     if (this.playing) {
@@ -97,6 +97,8 @@ export class GamePlay {
       }));
       this.startTimer();
     }
+    this.gameUi.displayFlagCount(this.flagCount);
+    this.gameUi.displayMineCount(this.mineCount);
     this.gameUi.toggleMinesInputDisable(this.playing);
     this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
     this.gameUi.displayLevel(this.level);
@@ -129,8 +131,8 @@ export class GamePlay {
 
   handleLeftClick = (e) => {
     if (!e.target.classList.contains('cell')) return;
-    if (!this.playing) this.startGame(e.target.id);
     const cell = this.getCell(e.target.id);
+    if (!this.playing) this.startGame(cell.id);
     if (cell.isOpen) return;
     this.clicks++;
     this.gameUi.displayClicks(this.clicks);
@@ -151,25 +153,24 @@ export class GamePlay {
     e.preventDefault();
     if (!e.target.classList.contains('cell')) return;
     const cell = this.getCell(e.target.id);
-    if (!cell.isOpen) cell.isFlagged ? this.unflagCell(cell, true) : this.flagCell(cell);
+    if (cell.isOpen) return;
+    cell.isFlagged ? this.unflagCell(cell, true) : this.flagCell(cell);
   }
 
   flagCell = (cell) => {
     if (this.soundOn) this.gameUi.playSound('flag');
     cell.isFlagged = true;
-    this.flagged++;
-    this.minesLeft--;
     this.gameUi.displayFlagged(cell);
-    this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
+    this.gameUi.displayFlagCount(++this.flagCount);
+    this.gameUi.displayMineCount(--this.mineCount);
   }
 
   unflagCell = (cell, isClicked) => {
     if (isClicked && this.soundOn) this.gameUi.playSound('unflag');
     cell.isFlagged = false;
-    this.flagged--;
-    this.minesLeft++;
     this.gameUi.displayFlagged(cell);
-    this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
+    this.gameUi.displayFlagCount(--this.flagCount);
+    this.gameUi.displayMineCount(++this.mineCount);
   }
 
   openCell = (cell, isClicked) => {

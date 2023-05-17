@@ -88,9 +88,12 @@ export class GameUI {
     if (!cell.isOpen) this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
   }
 
-  displayFlagsMinesLeft = (flagsCount, minesCount) => {
-    this.flagsLeft.innerText = `${flagsCount}`.padStart(2, '0');
-    this.minesLeft.innerText = `${minesCount}`.padStart(2, '0');
+  displayFlagCount = (flagCount) => {
+    this.flagsLeft.innerText = `${flagCount}`.padStart(2, '0');
+  }
+
+  displayMineCount = (mineCount) => {
+    this.minesLeft.innerText = `${mineCount}`.padStart(2, '0');
   }
 
   displayOpen = (cell, isClicked) => {
