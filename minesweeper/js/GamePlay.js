@@ -118,7 +118,6 @@ export class GamePlay {
     this.timer = setInterval(() => {
       this.seconds++;
       this.gameUi.displayTime(this.seconds);
-      if (this.seconds === 9999) clearInterval(this.timer);
     }, 1000);
   }
 

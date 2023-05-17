@@ -39,6 +39,8 @@ body.light .game-container {
   flex-wrap: wrap;
   align-items: center;
   height: 70px;
+  padding: 5px;
+  gap: 5px;
   border: 2px solid black;
   border-bottom: 0;
 }
@@ -90,7 +92,6 @@ body.light .game-container {
 }
 
 .stats {
-  width: 15%;
   display: flex;
   flex-direction: column;
 }
@@ -141,8 +142,8 @@ body.light .mines-left::before {
 }
 
 .field.size-10 {
-  width: 25vw;
-  height: 25vw;
+  width: 27vw;
+  height: 27vw;
 }
 
 .field.size-15 {
@@ -371,8 +372,8 @@ body.light .overlay-score {
 @media (max-width: 1400px) {
 
   .field.size-10 {
-    width: 35vw;
-    height: 35vw;
+    width: 37vw;
+    height: 37vw;
   }
 
   .field.size-15 {
@@ -384,8 +385,8 @@ body.light .overlay-score {
 @media (max-width: 1000px) {
 
   .field.size-10 {
-    width: 50vw;
-    height: 50vw;
+    width: 52vw;
+    height: 52vw;
   }
 
   .field.size-15 {
