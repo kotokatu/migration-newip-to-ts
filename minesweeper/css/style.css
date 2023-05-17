@@ -283,6 +283,11 @@ body.light .mines-left::before {
   border: 2px solid black;
 }
 
+.mines-input:invalid {
+  color: #ff0000;
+  border-color: #ff0000;
+}
+
 .mines-input::-webkit-inner-spin-button {
   opacity: 1;
 }

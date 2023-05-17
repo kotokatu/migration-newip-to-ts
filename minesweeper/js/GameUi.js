@@ -1,5 +1,7 @@
 export class GameUI {
   constructor() {
+    this.soundOn = false;
+    this.themeLight = false;
     this.open = new Audio('../assets/sounds/open.wav');
     this.flag = new Audio('../assets/sounds/flag.wav');
     this.unflag = new Audio('../assets/sounds/unflag.wav');
@@ -20,6 +22,7 @@ export class GameUI {
                                   <option value="medium">medium</option>
                                   <option value="hard">hard</option>`);
     this.minesInput = this.createNode('input', 'mines-input');
+    this.minesInput.setAttribute('required', '');
     this.minesInput.setAttribute('type', 'number');
     this.minesInput.setAttribute('min', '10');
     this.minesInput.setAttribute('max', '99');
@@ -105,7 +108,7 @@ export class GameUI {
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
 
-  highlightWrongFlags = (cell) => {
+  highlightWrongFlag = (cell) => {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     cellElem.classList.add('wrong-flag');
   }
@@ -119,19 +122,19 @@ export class GameUI {
   }
 
   toggleMinesInputDisable = (isPlaying) => {
-    this.minesInput.disabled = isPlaying ? true : false;
+    this.minesInput.disabled = isPlaying;
   }
 
   playSound = (action) => {
     this[action].play();
   }
 
-  toggleSound = (soundOn) => {
-    soundOn ? this.soundBtn.classList.remove('off') : this.soundBtn.classList.add('off');
+  toggleSound = () => {
+    this.soundOn ? this.soundBtn.classList.remove('off') : this.soundBtn.classList.add('off');
   }
 
-  toggleTheme = (themeLight) => {
-    themeLight ? document.body.classList.add('light') : document.body.classList.remove('light');
+  toggleTheme = () => {
+    this.themeLight ? document.body.classList.add('light') : document.body.classList.remove('light');
   }
 
   toggleScoreDisplay = (scoreArr) => {
