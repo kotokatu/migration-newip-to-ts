@@ -46,6 +46,7 @@ body.light .game-container {
 .time-display,
 .clicks-display {
   position: relative;
+  flex-shrink: 0;
   font-family: "Digital-7 Mono", sans-serif;
   font-size: 40px;
   color: red;
@@ -75,6 +76,8 @@ body.light .game-container {
 }
 
 .new-game-btn {
+  max-width: 40%;
+  flex-grow: 1;
   padding: 5px;
   font-family: inherit;
   font-size: 18px;
@@ -234,13 +237,13 @@ body.light .mines-left::before {
   right: 0;
   bottom: 0;
   display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
 .overlay-message {
   background-color: rgba(0, 0, 0, 0.6);
-  justify-content: center;
   align-items: center;
-  text-align: center;
 }
 
 .message {
@@ -344,10 +347,12 @@ body.light .sound-btn.off {
 }
 
 .overlay-score {
-  background-color: rgba(0, 0, 0, 0.95);
-  justify-content: center;
   align-items: flex-start;
-  text-align: center;
+  background-color: rgba(0, 0, 0, 0.95);
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 body.light .overlay-score {
@@ -392,8 +397,8 @@ body.light .overlay-score {
 @media (max-width: 725px) {
 
   .field.size-10 {
-    width: 70vw;
-    height: 70vw;
+    width: 75vw;
+    height: 75vw;
   }
 
   .field.size-15 {

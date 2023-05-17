@@ -13,8 +13,8 @@ export class GameUI {
     this.clicksDisplay = this.createNode('span', 'clicks-display');
     this.newGameButton = this.createNode('button', 'new-game-btn', 'New Game');
     this.stats = this.createNode('div', 'stats');
-    this.minesLeft = this.createNode('span', 'mines-left', '00');
-    this.flagsLeft = this.createNode('span', 'flags-left', '00');
+    this.minesLeft = this.createNode('span', 'mines-left');
+    this.flagsLeft = this.createNode('span', 'flags-left');
     this.select = this.createNode('select', 'level-select',
                                   `<option value="easy">easy</option>
                                   <option value="medium">medium</option>
@@ -151,9 +151,4 @@ export class GameUI {
       })
     });
   }
-
-  // toggleScoreBtn = () => {
-  //   this.scoreBtn.classList.toggle('active');
-  // }
-
 }

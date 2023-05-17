@@ -50,7 +50,7 @@ export class GameSetup {
     for (let y = cellY > 0 ? cellY - 1 : 0; y <= (cellY < this.size - 1 ? cellY + 1 : cellY); y++) {
       for (let x = cellX > 0 ? cellX - 1 : 0; x <= (cellX < this.size - 1 ? cellX + 1 : cellX); x++) {
         if (cellX === x && cellY === y) continue;
-        nearbyCellsArray.push(this.field[y][x])
+        nearbyCellsArray.push(this.field[y][x]);
       }
     }
     return nearbyCellsArray;

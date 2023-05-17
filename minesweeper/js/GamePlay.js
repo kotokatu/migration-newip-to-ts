@@ -23,8 +23,9 @@ export class GamePlay {
       (e.target.value > 9 && e.target.value < 100)
         ? this.gameSetup.minesNum = e.target.value
         : this.gameSetup.setMinesNum(this.level);
-      this.gameUi.displayFlagsMinesLeft(this.flagged, this.gameSetup.minesNum);
-      this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
+      this.minesLeft = this.gameSetup.minesNum - this.flagged;
+      this.gameUi.displayFlagsMinesLeft(this.flagged, this.minesLeft);
+      // this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
     });
     this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
     this.gameUi.gameField.addEventListener('contextmenu', this.handleRightClick);
@@ -79,7 +80,6 @@ export class GamePlay {
     this.seconds = 0;
     this.playing = false;
     clearInterval(this.timer);
-    // set('state', '');
   }
 
   loadGame = () => {
@@ -133,10 +133,19 @@ export class GamePlay {
     if (!this.playing) this.startGame(e.target.id);
     const cell = this.getCell(e.target.id);
     if (cell.isOpen) return;
-    this.openCell(cell, true);
+    this.clicks++;
     this.gameUi.displayClicks(this.clicks);
-    if (cell.isMine) this.endGame('lose');
-    else if (this.opened === this.gameSetup.size ** 2 - this.gameSetup.minesNum) this.endGame('win');
+    this.openCell(cell, true);
+    if (cell.isMine) {
+      this.endGame('lose');
+      return;
+    }
+    if (this.opened === this.gameSetup.size ** 2 - this.gameSetup.minesNum) {
+      this.endGame('win');
+      return;
+    }
+    if (this.soundOn) this.gameUi.playSound('open');
+    if (cell.isFlagged) this.unflagCell(cell, false);
   }
 
   handleRightClick = (e) => {
@@ -166,18 +175,11 @@ export class GamePlay {
 
   openCell = (cell, isClicked) => {
     cell.isOpen = true;
-    this.opened++;
-    if (isClicked) {
-      this.clicks++;
-      if (!cell.isMine && this.soundOn) this.gameUi.playSound('open');
-      if (cell.isFlagged) this.unflagCell(cell);
-    }
     this.gameUi.displayOpen(cell, isClicked);
-    if (cell.value === 0) {
-      this.gameSetup.getNearbyCells(cell.id).forEach(cell => {
-        if (!cell.isOpen && !cell.isFlagged) this.openCell(cell);
-      })
-    }
+    this.opened++;
+    if (cell.value === 0) this.gameSetup.getNearbyCells(cell.id).forEach(cell => {
+      if (!cell.isFlagged && !cell.isOpen) this.openCell(cell, false);
+    });
   }
 
   updateScore = () => {
@@ -188,15 +190,14 @@ export class GamePlay {
 
   endGame = (result) => {
     this.playing = false;
-    clearInterval(this.timer);
     if (result === 'lose') {
       if (this.soundOn) this.gameUi.playSound('lose');
       this.gameUi.displayMessage('Game over<br>Try again');
     }
     if (result === 'win') {
       this.updateScore();
-      this.gameUi.displayMessage(`Hooray! You found all mines in ${this.seconds} seconds and ${this.clicks} moves!`);
       if (this.soundOn) this.gameUi.playSound('win');
+      this.gameUi.displayMessage(`Hooray! You found all mines in ${this.seconds} seconds and ${this.clicks} moves!`);
     }
     this.gameSetup.field.forEach(row => row.forEach(cell => {
       if (cell.isMine) this.openCell(cell);
