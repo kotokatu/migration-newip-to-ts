@@ -36,14 +36,14 @@ export class GameUI {
     this.gameFooter.append(this.select, this.minesInput, this.scoreBtn, this.soundBtn, this.themeBtn);
   }
 
-  createNode = (tag, className, content = null) => {
+  createNode(tag, className, content = null) {
     const node = document.createElement(`${tag}`);
     node.className = className;
     node.innerHTML = content;
     return node;
   }
 
-  renderField = (array) => {
+  renderField(array) {
     this.gameField.replaceChildren();
     const size = array.length;
     this.gameField.className = `field size-${size}`;
@@ -53,7 +53,7 @@ export class GameUI {
     this.scoreBtn.classList.remove('active');
   }
 
-  createRow = (rowArr) => {
+  createRow(rowArr) {
     const row = this.createNode('div', 'row');
     const size = rowArr.length;
     rowArr.forEach(cell => {
@@ -62,44 +62,44 @@ export class GameUI {
     return row;
   }
 
-  createCell = (cell, size) => {
+  createCell(cell, size) {
     const cellElem = this.createNode('span', `cell size-${size}`);
     cellElem.id = cell.id;
     return cellElem;
   }
 
-  createOverlay = (cls) => {
+  createOverlay(cls) {
     const overlay = this.createNode('div', `overlay ${cls}`);
     this.gameField.append(overlay);
     return overlay;
   }
 
-  displayMessage = (msg) => {
+  displayMessage(msg) {
     const overlay = this.createOverlay('overlay-message');
     overlay.innerHTML = `<p class="message">${msg}</p>`;
   }
 
-  displayTime = (seconds) => {
+  displayTime(seconds) {
     this.timeDisplay.innerText = `${seconds}`.padStart(3, '0');
   }
 
-  displayClicks = (clicks) => {
+  displayClicks(clicks) {
     this.clicksDisplay.innerText = `${clicks}`.padStart(3, '0');
   }
 
-  displayFlagged = (cell) => {
+  displayFlagged(cell) {
     if (!cell.isOpen) this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
   }
 
-  displayFlagCount = (flagCount) => {
+  displayFlagCount(flagCount) {
     this.flagsLeft.innerText = `${flagCount}`.padStart(2, '0');
   }
 
-  displayMineCount = (mineCount) => {
+  displayMineCount(mineCount) {
     this.minesLeft.innerText = `${mineCount}`.padStart(2, '0');
   }
 
-  displayOpen = (cell, isClicked) => {
+  displayOpen(cell, isClicked) {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     if (cell.isOpen) {
       cell.isMine ? cellElem.classList.add('open', 'mine') : cellElem.classList.add('open', `cc-${cell.value}`) ;
@@ -108,36 +108,36 @@ export class GameUI {
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
 
-  highlightWrongFlag = (cell) => {
+  highlightWrongFlag(cell) {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     cellElem.classList.add('wrong-flag');
   }
 
-  displayLevel = (level) => {
+  displayLevel(level) {
     this.select.value = level;
   }
 
-  setMinesInputValue = (value) => {
+  setMinesInputValue(value) {
     this.minesInput.value = value;
   }
 
-  toggleMinesInputDisable = (isPlaying) => {
+  toggleMinesInputDisable(isPlaying) {
     this.minesInput.disabled = isPlaying;
   }
 
-  playSound = (action) => {
+  playSound(action) {
     this[action].play();
   }
 
-  toggleSound = () => {
+  toggleSound() {
     this.soundOn ? this.soundBtn.classList.remove('off') : this.soundBtn.classList.add('off');
   }
 
-  toggleTheme = () => {
+  toggleTheme() {
     this.themeLight ? document.body.classList.add('light') : document.body.classList.remove('light');
   }
 
-  toggleScoreDisplay = (scoreArr) => {
+  toggleScoreDisplay(scoreArr) {
     const overlay = document.querySelector('.overlay-score') || this.createOverlay('overlay-score');
     if (document.querySelector('.score-table')) {
       this.scoreBtn.classList.remove('active');

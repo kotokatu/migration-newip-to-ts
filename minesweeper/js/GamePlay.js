@@ -6,68 +6,13 @@ export class GamePlay {
     this.gameSetup = gameSetup;
   }
 
-  init = () => {
+  init() {
     get('state') ? this.setSavedState(JSON.parse(get('state'))) : this.resetState();
     this.loadGame();
-    this.gameUi.newGameButton.addEventListener('click', () => {
-      this.resetState();
-      this.loadGame();
-    });
-    this.gameUi.select.addEventListener('change', (e) => {
-      this.level = e.target.value;
-      this.resetState();
-      this.gameSetup.setMinesNum(this.level);
-      this.loadGame();
-    });
-    this.gameUi.minesInput.addEventListener('input', (e) => {
-      (this.gameUi.minesInput.checkValidity())
-        ? this.gameSetup.minesNum = e.target.value
-        : this.gameSetup.minesNum = 0;
-      this.mineCount = this.gameSetup.minesNum ? this.gameSetup.minesNum - this.flagCount : 0;
-      this.gameUi.displayFlagCount(this.flagCount);
-      this.gameUi.displayMineCount(this.mineCount);
-    });
-    this.gameUi.minesInput.addEventListener('blur', () => {
-      if (!this.gameUi.minesInput.checkValidity()) {
-        this.gameSetup.setMinesNum(this.level);
-        this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
-      }
-      this.mineCount = this.gameSetup.minesNum - this.flagCount;
-      this.gameUi.displayFlagCount(this.flagCount);
-      this.gameUi.displayMineCount(this.mineCount);
-    });
-    this.gameUi.minesInput.addEventListener('keydown', (e) => {
-      if (e.code === 'Enter') this.gameUi.minesInput.blur();
-    });
-    this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
-    this.gameUi.gameField.addEventListener('contextmenu', this.handleRightClick);
-    this.gameUi.soundBtn.addEventListener('click', () => {
-      this.gameUi.soundOn = !this.gameUi.soundOn;
-      this.gameUi.toggleSound();
-    });
-    this.gameUi.themeBtn.addEventListener('click', () => {
-      this.gameUi.themeLight = !this.gameUi.themeLight;
-      this.gameUi.toggleTheme();
-    });
-    this.gameUi.scoreBtn.addEventListener('click', () => this.gameUi.toggleScoreDisplay(this.score));
-    window.addEventListener('beforeunload', () => set('state', JSON.stringify(
-      [
-        this.gameSetup.field,
-        this.gameSetup.minesNum,
-        this.gameUi.soundOn,
-        this.gameUi.themeLight,
-        this.level,
-        this.clicks,
-        this.opened,
-        this.flagCount,
-        this.seconds,
-        this.playing,
-        this.score
-      ]
-    )));
+    this.addListeners();
   }
 
-  setSavedState = (state) => {
+  setSavedState(state) {
     [
       this.gameSetup.field,
       this.gameSetup.minesNum,
@@ -83,7 +28,7 @@ export class GamePlay {
     ] = state;
   }
 
-  resetState = () => {
+  resetState() {
     this.gameSetup.field = [];
     this.level = this.level || 'easy';
     this.clicks = 0;
@@ -94,7 +39,7 @@ export class GamePlay {
     clearInterval(this.timer);
   }
 
-  loadGame = () => {
+  loadGame() {
     this.gameSetup.setFieldSize(this.level);
     if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
     const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
@@ -119,7 +64,7 @@ export class GamePlay {
     this.gameUi.toggleTheme();
   }
 
-  startGame = (id) => {
+  startGame(id) {
     this.playing = true;
     this.gameSetup.generateMines(id);
     this.gameSetup.getNearbyMinesCount();
@@ -127,14 +72,14 @@ export class GamePlay {
     this.startTimer();
   }
 
-  startTimer = () => {
+  startTimer() {
     this.timer = setInterval(() => {
       this.seconds++;
       this.gameUi.displayTime(this.seconds);
     }, 1000);
   }
 
-  getCell = (id) => {
+  getCell(id) {
     const y = +id.split('_')[1];
     const x = +id.split('_')[2];
     return this.gameSetup.field[y][x];
@@ -168,7 +113,7 @@ export class GamePlay {
     cell.isFlagged ? this.unflagCell(cell) : this.flagCell(cell);
   }
 
-  flagCell = (cell) => {
+  flagCell(cell) {
     if (this.gameUi.soundOn) this.gameUi.playSound('flag');
     cell.isFlagged = true;
     this.gameUi.displayFlagged(cell);
@@ -176,7 +121,7 @@ export class GamePlay {
     this.gameUi.displayMineCount(--this.mineCount);
   }
 
-  unflagCell = (cell) => {
+  unflagCell(cell) {
     if (!cell.isOpen && this.gameUi.soundOn) this.gameUi.playSound('unflag');
     cell.isFlagged = false;
     this.gameUi.displayFlagged(cell);
@@ -184,7 +129,7 @@ export class GamePlay {
     this.gameUi.displayMineCount(++this.mineCount);
   }
 
-  openCell = (cell, isClicked) => {
+  openCell(cell, isClicked) {
     cell.isOpen = true;
     this.gameUi.displayOpen(cell, isClicked);
     this.opened++;
@@ -193,13 +138,13 @@ export class GamePlay {
     });
   }
 
-  updateScore = () => {
+  updateScore() {
     this.score = this.score || [];
     if (this.score.length === 10) this.score.pop();
     this.score.unshift([this.level, this.gameSetup.minesNum, this.clicks, this.seconds]);
   }
 
-  endGame = (result) => {
+  endGame(result) {
     this.playing = false;
     if (this.gameUi.soundOn) this.gameUi.playSound(result);
     if (result === 'lose') this.gameUi.displayMessage('Game over<br>Try again');
@@ -213,5 +158,64 @@ export class GamePlay {
     }));
     this.gameUi.toggleMinesInputDisable(this.playing);
     this.resetState();
+  }
+
+  addListeners() {
+    this.gameUi.gameField.addEventListener('click', this.handleLeftClick);
+    this.gameUi.gameField.addEventListener('contextmenu', this.handleRightClick);
+    this.gameUi.newGameButton.addEventListener('click', () => {
+      this.resetState();
+      this.loadGame();
+    });
+    this.gameUi.select.addEventListener('change', (e) => {
+      this.level = e.target.value;
+      this.resetState();
+      this.gameSetup.setMinesNum(this.level);
+      this.loadGame();
+    });
+    this.gameUi.minesInput.addEventListener('input', (e) => {
+      (this.gameUi.minesInput.checkValidity())
+        ? this.gameSetup.minesNum = e.target.value
+        : this.gameSetup.minesNum = 0;
+      this.mineCount = this.gameSetup.minesNum ? this.gameSetup.minesNum - this.flagCount : 0;
+      this.gameUi.displayFlagCount(this.flagCount);
+      this.gameUi.displayMineCount(this.mineCount);
+    });
+    this.gameUi.minesInput.addEventListener('focusout', () => {
+      if (!this.gameUi.minesInput.checkValidity()) {
+        this.gameSetup.setMinesNum(this.level);
+        this.gameUi.setMinesInputValue(this.gameSetup.minesNum);
+        this.mineCount = this.gameSetup.minesNum - this.flagCount;
+        this.gameUi.displayFlagCount(this.flagCount);
+        this.gameUi.displayMineCount(this.mineCount);
+      }
+    });
+    this.gameUi.minesInput.addEventListener('keydown', (e) => {
+      if (e.code === 'Enter') this.gameUi.minesInput.blur();
+    });
+    this.gameUi.soundBtn.addEventListener('click', () => {
+      this.gameUi.soundOn = !this.gameUi.soundOn;
+      this.gameUi.toggleSound();
+    });
+    this.gameUi.themeBtn.addEventListener('click', () => {
+      this.gameUi.themeLight = !this.gameUi.themeLight;
+      this.gameUi.toggleTheme();
+    });
+    this.gameUi.scoreBtn.addEventListener('click', () => this.gameUi.toggleScoreDisplay(this.score));
+    window.addEventListener('beforeunload', () => set('state', JSON.stringify(
+      [
+        this.gameSetup.field,
+        this.gameSetup.minesNum,
+        this.gameUi.soundOn,
+        this.gameUi.themeLight,
+        this.level,
+        this.clicks,
+        this.opened,
+        this.flagCount,
+        this.seconds,
+        this.playing,
+        this.score
+      ]
+    )));
   }
 }
