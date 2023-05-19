@@ -33,6 +33,7 @@ body.light {
 .game-container {
   margin: 50px auto 0;
   background-color: rgb(61, 61, 61);
+  border: 2px solid black;
 }
 
 body.light .game-container {
@@ -47,8 +48,6 @@ body.light .game-container {
   height: 70px;
   padding: 5px;
   gap: 5px;
-  border: 2px solid black;
-  border-bottom: 0;
 }
 
 .time-display,
@@ -165,8 +164,6 @@ body.light .mines-left::before {
   display: flex;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
 }
 
 .row:first-child {
@@ -277,8 +274,6 @@ body.light .mines-left::before {
   padding: 10px;
   display: flex;
   gap: 10px;
-  border: 2px solid black;
-  border-top: 0;
 }
 
 .level-select,
@@ -416,6 +411,7 @@ body.light .overlay-score {
     width: 65vw;
     height: 65vw;
   }
+
 }
 
 @media (max-width: 725px) {
@@ -435,5 +431,12 @@ body.light .overlay-score {
   }
 }
 
+  @media (max-width: 420px) {
+
+    .field.size-10 {
+      width: 95vw;
+      height: 95vw;
+    }
+}
 
 
