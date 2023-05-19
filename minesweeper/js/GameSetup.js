@@ -19,7 +19,6 @@ export class GameSetup {
         this.field[i].push(this.generateCell(i, j))
       }
     }
-    return this.field;
   }
 
   generateCell(y, x) {

@@ -41,16 +41,9 @@ export class GamePlay {
 
   loadGame() {
     this.gameSetup.setFieldSize(this.level);
-    const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
-    this.gameUi.renderField(field);
+    if (!this.playing) this.gameSetup.generateField();
+    this.gameUi.renderField(this.gameSetup.field);
     if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
-    if (this.playing) {
-      field.forEach(row => row.forEach(cell => {
-        this.gameUi.displayFlagged(cell);
-        this.gameUi.displayOpen(cell);
-      }));
-      this.startTimer();
-    }
     this.flagCount = this.playing ? this.flagCount : 0;
     this.mineCount = this.gameSetup.minesNum - this.flagCount;
     this.gameUi.displayFlagCount(this.flagCount);
@@ -62,6 +55,13 @@ export class GamePlay {
     this.gameUi.displayTime(this.seconds);
     this.gameUi.toggleSound();
     this.gameUi.toggleTheme();
+    if (this.playing) {
+      this.gameSetup.field.forEach(row => row.forEach(cell => {
+        this.gameUi.displayFlagged(cell);
+        this.gameUi.displayOpen(cell);
+      }));
+      this.startTimer();
+    }
   }
 
   startGame(id) {
@@ -88,8 +88,8 @@ export class GamePlay {
   handleLeftClick = (e) => {
     if (!e.target.classList.contains('cell')) return;
     const cell = this.getCell(e.target.id);
+    if (cell.isOpen || cell.isFlagged) return;
     if (!this.playing) this.startGame(cell.id);
-    if (cell.isOpen) return;
     this.clicks++;
     this.gameUi.displayClicks(this.clicks);
     this.openCell(cell, true);
@@ -102,7 +102,6 @@ export class GamePlay {
       return;
     }
     if (this.gameUi.soundOn) this.gameUi.playSound('open');
-    if (cell.isFlagged) this.unflagCell(cell);
   }
 
   handleRightClick = (e) => {
@@ -122,7 +121,7 @@ export class GamePlay {
   }
 
   unflagCell(cell) {
-    if (!cell.isOpen && this.gameUi.soundOn) this.gameUi.playSound('unflag');
+    if (this.gameUi.soundOn) this.gameUi.playSound('unflag');
     cell.isFlagged = false;
     this.gameUi.displayFlagged(cell);
     this.gameUi.displayFlagCount(--this.flagCount);
