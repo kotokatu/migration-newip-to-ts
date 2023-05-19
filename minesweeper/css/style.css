@@ -136,8 +136,6 @@ body.light .mines-left::before {
   max-height: 750px;
   display: flex;
   flex-direction: column;
-  display: flex;
-  flex-direction: column;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
@@ -413,7 +411,7 @@ body.light .overlay-score {
     height: 95vw;
   }
 
-  .cell.size-25 {
+  .field.size-25 .cell {
     font-size: 12px;
   }
 }

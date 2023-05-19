@@ -62,8 +62,8 @@ export class GameUI {
     return row;
   }
 
-  createCell(cell, size) {
-    const cellElem = this.createNode('span', `cell size-${size}`);
+  createCell(cell) {
+    const cellElem = this.createNode('span', `cell`);
     cellElem.id = cell.id;
     return cellElem;
   }

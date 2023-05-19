@@ -31,9 +31,7 @@ export class GameSetup {
     let i = 0;
     while (i < this.minesNum) {
       const cell = this.field[this.getRandomNum()][this.getRandomNum()];
-      if (cell.isMine || cell.id === id) {
-        continue;
-      }
+      if (cell.isMine || cell.id === id) continue;
       cell.isMine = true;
       i++;
     }
@@ -63,5 +61,4 @@ export class GameSetup {
       });
     })
   }
-
 }

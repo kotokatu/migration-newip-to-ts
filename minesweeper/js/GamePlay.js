@@ -41,9 +41,9 @@ export class GamePlay {
 
   loadGame() {
     this.gameSetup.setFieldSize(this.level);
-    if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
     const field = this.playing ? this.gameSetup.field : this.gameSetup.generateField();
     this.gameUi.renderField(field);
+    if (!this.gameSetup.minesNum) this.gameSetup.setMinesNum(this.level);
     if (this.playing) {
       field.forEach(row => row.forEach(cell => {
         this.gameUi.displayFlagged(cell);
