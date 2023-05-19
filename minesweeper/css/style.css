@@ -282,19 +282,17 @@ body.light .mines-left::before {
   font-family: 'Orbitron', sans-serif;
   background-color: darkgrey;
   outline: none;
-  border: none;
+  border: 2px solid black;
 }
 
 .level-select {
   padding: 3px;
-  border: 2px solid black;
-  border: 2px solid black;
+  color: #000000;
 }
 
 .mines-input {
   max-width: 53px;
   padding: 4px;
-  color: #000000;
 }
 
 .mines-input:invalid {
