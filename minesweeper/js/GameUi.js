@@ -2,11 +2,11 @@ export class GameUI {
   constructor() {
     this.soundOn = false;
     this.themeLight = false;
-    this.open = new Audio('../assets/sounds/open.wav');
-    this.flag = new Audio('../assets/sounds/flag.wav');
-    this.unflag = new Audio('../assets/sounds/unflag.wav');
-    this.lose = new Audio('../assets/sounds/lose.wav');
-    this.win = new Audio('../assets/sounds/win.wav');
+    this.open = new Audio('assets/sounds/open.wav');
+    this.flag = new Audio('assets/sounds/flag.wav');
+    this.unflag = new Audio('assets/sounds/unflag.wav');
+    this.lose = new Audio('assets/sounds/lose.wav');
+    this.win = new Audio('assets/sounds/win.wav');
     this.gameContainer = this.createNode('div', 'game-container');
     this.gameHeader = this.createNode('div', 'game-header');
     this.gameField = this.createNode('div', '');

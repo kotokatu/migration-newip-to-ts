@@ -23,7 +23,6 @@
 body {
   display: flex;
   flex-direction: column;
-  font-family: 'Orbitron', sans-serif;
   background-color: #272727;
 }
 
@@ -34,7 +33,6 @@ body.light {
 .game-container {
   margin: 50px auto 0;
   background-color: rgb(61, 61, 61);
-  /* border: 2px solid black; */
 }
 
 body.light .game-container {
@@ -89,7 +87,7 @@ body.light .game-container {
   max-width: 40%;
   flex-grow: 1;
   padding: 5px;
-  font-family: inherit;
+  font-family: 'Orbitron', sans-serif;
   font-size: 18px;
   background-color: darkgrey;
   cursor: pointer;
@@ -105,10 +103,11 @@ body.light .game-container {
   flex-direction: column;
 }
 
-.mines-left, 
+.mines-left,
 .flags-left {
   position: relative;
   padding-left: 25px;
+  font-family: 'Orbitron', sans-serif;
   color: rgb(168, 168, 168);
 }
 
@@ -144,8 +143,6 @@ body.light .mines-left::before {
   max-height: 750px;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
 }
 
 .field.size-10 {
@@ -166,6 +163,17 @@ body.light .mines-left::before {
 .row {
   flex: 1;
   display: flex;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.row:first-child {
+  border-top: 2px solid black;
+}
+.row:last-child {
+  border-bottom: 2px solid black;
 }
 
 .cell {
@@ -175,16 +183,12 @@ body.light .mines-left::before {
   flex: 1;
   font-size: 20px;
   font-family: 'Orbitron', sans-serif;
-  border: 1px solid black;
   cursor: default;
-}
-
-.cell:first-child {
   border-left: 2px solid black;
 }
 
-.cell:last-child {
-  border-right: 2px solid black;
+.cell:first-child {
+  border-left: 0;
 }
 
 .cell.cc-1 {
