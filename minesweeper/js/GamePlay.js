@@ -140,7 +140,11 @@ export class GamePlay {
   updateScore() {
     this.score = this.score || [];
     if (this.score.length === 10) this.score.pop();
-    this.score.unshift([this.level, this.gameSetup.minesNum, this.clicks, this.seconds]);
+    this.score.unshift([
+      `${this.gameSetup.size} x ${this.gameSetup.size}`,
+      this.gameSetup.minesNum,
+      this.clicks,
+      this.seconds]);
   }
 
   endGame(result) {

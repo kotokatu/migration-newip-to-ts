@@ -146,7 +146,7 @@ export class GameUI {
     }
     this.scoreBtn.classList.add('active');
     const scoreTable = this.createNode('table', 'score-table',
-      `<table><tr><th class="score-cell">level</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
+      `<table><tr><th class="score-cell">field</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
     overlay.append(scoreTable);
     if (scoreArr) scoreArr.forEach(row => {
       const rowElem = this.createNode('tr', 'score-row');
