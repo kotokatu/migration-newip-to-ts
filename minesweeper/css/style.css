@@ -242,7 +242,7 @@ body.light .mines-left::before {
 }
 
 .cell.flagged {
-  background-size: 90% 90%;
+  background-size: 80% 80%;
   background-image: url('../assets/svg/flag.svg');
 }
 
