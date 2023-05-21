@@ -88,7 +88,9 @@ export class GameUI {
   }
 
   displayFlagged(cell) {
-    if (!cell.isOpen) this.gameField.querySelector(`#${cell.id}`).innerText = cell.isFlagged ? '🚩' : '';
+    if (cell.isOpen) return;
+    const cellElem = this.gameField.querySelector(`#${cell.id}`);
+    cell.isFlagged ? cellElem.classList.add('flagged') : cellElem.classList.remove('flagged');
   }
 
   displayFlagCount(flagCount) {
@@ -103,7 +105,7 @@ export class GameUI {
     const cellElem = this.gameField.querySelector(`#${cell.id}`);
     if (cell.isOpen) {
       cell.isMine ? cellElem.classList.add('open', 'mine') : cellElem.classList.add('open', `cc-${cell.value}`) ;
-      cellElem.innerHTML = cell.value ? cell.value : '';
+      cellElem.innerHTML = cell.value || '';
     }
     if (cell.isMine && isClicked) cellElem.classList.add('exploded');
   }
