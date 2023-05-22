@@ -146,7 +146,7 @@ export class GamePlay {
       `${this.gameSetup.size} x ${this.gameSetup.size}`,
       this.gameSetup.minesNum,
       this.clicks,
-      this.seconds]);
+      `${this.seconds}s`]);
   }
 
   endGame(result) {
