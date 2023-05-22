@@ -327,7 +327,7 @@ body.light .overlay-message {
   font-size: 40px;
   font-weight: 700;
   color: red;
-  animation: drop 0.5s forwards;
+  animation: drop 0.9s forwards;
 }
 
 @keyframes drop {
