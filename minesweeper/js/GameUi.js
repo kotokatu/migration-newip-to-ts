@@ -70,13 +70,20 @@ export class GameUI {
 
   createOverlay(cls) {
     const overlay = this.createNode('div', `overlay ${cls}`);
+    const overlayBtn = this.createNode('button', 'overlay-btn');
+    overlay.append(overlayBtn);
     this.gameField.append(overlay);
+    overlayBtn.addEventListener('click', () => {
+      this.scoreBtn.classList.remove('active');
+      overlay.remove();
+    })
     return overlay;
   }
 
   displayMessage(msg) {
     const overlay = this.createOverlay('overlay-message');
-    overlay.innerHTML = `<p class="message">${msg}</p>`;
+    const message = this.createNode('p', 'message', msg)
+    overlay.append(message);
   }
 
   displayTime(seconds) {
@@ -141,15 +148,19 @@ export class GameUI {
 
   toggleScoreDisplay(scoreArr) {
     const overlay = document.querySelector('.overlay-score') || this.createOverlay('overlay-score');
-    if (document.querySelector('.score-table')) {
+    if (overlay.querySelector('.score-table')) {
       this.scoreBtn.classList.remove('active');
       overlay.remove();
       return;
     }
     this.scoreBtn.classList.add('active');
+    overlay.append(this.renderScore(scoreArr));
+
+  }
+
+  renderScore(scoreArr) {
     const scoreTable = this.createNode('table', 'score-table',
       `<table><tr><th class="score-cell">field</th><th class="score-cell">mines</th><th class="score-cell">moves</th><th class="score-cell">time</th></tr></table>`);
-    overlay.append(scoreTable);
     if (scoreArr) scoreArr.forEach(row => {
       const rowElem = this.createNode('tr', 'score-row');
       scoreTable.append(rowElem);
@@ -158,5 +169,6 @@ export class GameUI {
         rowElem.append(cellElem);
       })
     });
+    return scoreTable;
   }
 }

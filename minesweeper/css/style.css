@@ -272,12 +272,52 @@ body.light .mines-left::before {
   border-bottom: 2px solid black;
 }
 
+.overlay-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 15px;
+  height: 15px;
+  background-image: url('../assets/svg/cross-dark.svg');
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 15px 15px;
+  cursor: pointer;
+}
+
+body.light .overlay-btn {
+  background-image: url('../assets/svg/cross-light.svg');
+}
+
+.overlay-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 15px;
+  height: 15px;
+  background-image: url('../assets/svg/cross-dark.svg');
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 15px 15px;
+  cursor: pointer;
+}
+
+body.light .overlay-btn {
+  background-image: url('../assets/svg/cross-light.svg');
+}
+
 .overlay-message {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
 body.light .overlay-message {
-  background-color: rgba(248, 248, 248, 0.75);
+  background-color: rgba(248, 248, 248, 0.9);
 }
 
 .message {
@@ -396,11 +436,11 @@ body.light .sound-btn.off {
 
 .overlay-score {
   align-items: flex-start;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgb(0, 0, 0);
 }
 
 body.light .overlay-score {
-  background-color: rgba(248, 248, 248, 0.95);
+  background-color: rgb(248, 248, 248);
 }
 
 .score-cell {

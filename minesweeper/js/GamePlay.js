@@ -36,6 +36,7 @@ export class GamePlay {
     this.flagCount = 0;
     this.seconds = 0;
     this.playing = false;
+    this.ended = false;
     clearInterval(this.timer);
   }
 
@@ -160,8 +161,8 @@ export class GamePlay {
       else if (cell.isFlagged) this.gameUi.highlightWrongFlag(cell);
     }));
     this.resetState();
-    this.ended = true;
     this.gameUi.toggleMinesInputDisable(this.playing);
+    this.ended = true;
   }
 
   addListeners() {
