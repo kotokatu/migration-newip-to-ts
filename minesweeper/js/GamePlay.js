@@ -40,6 +40,7 @@ export class GamePlay {
   }
 
   loadGame() {
+    this.ended = false;
     this.gameSetup.setFieldSize(this.level);
     if (!this.playing) this.gameSetup.generateField();
     this.gameUi.renderField(this.gameSetup.field);
@@ -86,7 +87,7 @@ export class GamePlay {
   }
 
   handleLeftClick = (e) => {
-    if (!e.target.classList.contains('cell')) return;
+    if (!e.target.classList.contains('cell') || this.ended) return;
     const cell = this.getCell(e.target.id);
     if (cell.isOpen || cell.isFlagged) return;
     if (!this.playing) this.startGame(cell.id);
@@ -106,7 +107,7 @@ export class GamePlay {
 
   handleRightClick = (e) => {
     e.preventDefault();
-    if (!e.target.classList.contains('cell')) return;
+    if (!e.target.classList.contains('cell') || this.ended) return;
     const cell = this.getCell(e.target.id);
     if (cell.isOpen) return;
     cell.isFlagged ? this.unflagCell(cell) : this.flagCell(cell);
@@ -148,7 +149,6 @@ export class GamePlay {
   }
 
   endGame(result) {
-    this.playing = false;
     if (this.gameUi.soundOn) this.gameUi.playSound(result);
     if (result === 'lose') this.gameUi.displayMessage('Game over<br>Try again');
     if (result === 'win') {
@@ -159,8 +159,9 @@ export class GamePlay {
       if (cell.isMine) this.openCell(cell);
       else if (cell.isFlagged) this.gameUi.highlightWrongFlag(cell);
     }));
-    this.gameUi.toggleMinesInputDisable(this.playing);
     this.resetState();
+    this.ended = true;
+    this.gameUi.toggleMinesInputDisable(this.playing);
   }
 
   addListeners() {
