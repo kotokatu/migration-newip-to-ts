@@ -275,6 +275,10 @@ body.light .mines-left::before {
   align-items: center;
 }
 
+body.light .overlay-message {
+  background-color: rgba(248, 248, 248, 0.85);
+}
+
 .message {
   max-width: 600px;
   font-family: 'Orbitron', sans-serif;
