@@ -268,6 +268,8 @@ body.light .mines-left::before {
   display: flex;
   justify-content: center;
   text-align: center;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 .overlay-message {
@@ -384,10 +386,6 @@ body.light .sound-btn.off {
 .overlay-score {
   align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.95);
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
 }
 
 body.light .overlay-score {
